@@ -51,11 +51,13 @@ public class MenuPacientes {
                 case 4:
                     JOptionPane.showMessageDialog(null,
                             "Aquí se ejecutará la opción Mostrar Fichas Pendientes.");
+                    
                     break;
 
                 case 5:
                     JOptionPane.showMessageDialog(null,
                             "Aquí se ejecutará la opción Mostrar Quejas Recibidas.");
+                    
                     break;
 
                 case 6:
