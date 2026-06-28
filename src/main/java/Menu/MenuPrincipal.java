@@ -8,12 +8,13 @@ package Menu;
  *
  * @author ignap
  */
-
 import javax.swing.JOptionPane;
 
 public class MenuPrincipal {
 
-    public static void main(String[] args) {
+    public void mostrarMenuPrincipal() {
+        
+        MenuPacientes menuP = new MenuPacientes();
 
         int opcion;
 
@@ -21,14 +22,11 @@ public class MenuPrincipal {
 
             opcion = Integer.parseInt(JOptionPane.showInputDialog(
                     "=================================\n"
-                    + "GESTIONAR LLEGADA DE PACIENTES\n"
+                    + "BIENVENIDO A HOSPITAL 'SU SALUD'\n"
                     + "=================================\n\n"
-                    + "1. Seleccionar Ficha\n"
-                    + "2. Atender Paciente\n"
-                    + "3. Abandonar Cola de Pacientes\n"
-                    + "4. Mostrar Fichas Pendientes\n"
-                    + "5. Mostrar Quejas Recibidas\n"
-                    + "6. Regresar\n\n"
+                    + "1. Gestionar Llegada de Pacientes\n"
+                    + "2. Ayuda\n"
+                    + "3. Salir\n\n"
                     + "Seleccione una opción:"
             ));
 
@@ -36,32 +34,21 @@ public class MenuPrincipal {
 
                 case 1:
                     JOptionPane.showMessageDialog(null,
-                            "Opción: Seleccionar Ficha");
+                            "Opción: Gestionar Llegada de Pacientes");
+                    menuP.mostrarMenu();
                     break;
 
                 case 2:
                     JOptionPane.showMessageDialog(null,
-                            "Opción: Atender Paciente");
+                            "Opción: Ayuda");
+                    mostrarAyuda();
                     break;
 
                 case 3:
                     JOptionPane.showMessageDialog(null,
-                            "Opción: Abandonar Cola de Pacientes");
-                    break;
-
-                case 4:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción: Mostrar Fichas Pendientes");
-                    break;
-
-                case 5:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción: Mostrar Quejas Recibidas");
-                    break;
-
-                case 6:
-                    JOptionPane.showMessageDialog(null,
-                            "Regresando al menú principal...");
+                            "Opción: Salir");
+                    JOptionPane.showMessageDialog(null, 
+                            "GRACIAS POR SU VISITA");
                     break;
 
                 default:
@@ -69,6 +56,20 @@ public class MenuPrincipal {
                             "Opción inválida.");
             }
 
-        } while (opcion != 6);
+        } while (opcion != 3);
+    }
+    
+    public void mostrarAyuda() {
+        JOptionPane.showMessageDialog(null,
+                "=================================\n"
+              + "    VERSIÓN DE LA HERRAMIENTA\n"
+              + "=================================\n\n"
+              + "Avance 1 V 1.0.N (N numero de avances internos)\n"
+              + "Colaboradores: \n"
+              + "Ignacio R. Leitón Benavides \n"
+              + "NOMBRE Y APELLIDO \n"
+              + "NOMBRE Y APELLIDO \n"
+              + "NOMBRE Y APELLIDO \n"
+        );
     }
 }
