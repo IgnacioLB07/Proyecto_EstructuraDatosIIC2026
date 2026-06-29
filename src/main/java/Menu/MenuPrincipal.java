@@ -78,7 +78,7 @@ public class MenuPrincipal {
               + "Avance 1 V 1.0.N (N numero de avances internos)\n"
               + "Colaboradores: \n"
               + "Ignacio R. Leitón Benavides \n"
-              + "NOMBRE Y APELLIDO \n"
+              + "Johan Rodriguez Chaves \n"
               + "NOMBRE Y APELLIDO \n"
         );
     }

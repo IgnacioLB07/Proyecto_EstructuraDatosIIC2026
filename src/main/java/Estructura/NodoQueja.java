@@ -4,10 +4,33 @@
  */
 package Estructura;
 
-/**
- *
- * @author ignap
- */
+import Modelo.Queja;
+
 public class NodoQueja {
+    
+    private Queja dato;
+    private NodoQueja siguiente;
+
+    public NodoQueja(Queja dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+
+    public Queja getDato() {
+        return dato;
+    }
+
+    public void setDato(Queja dato) {
+        this.dato = dato;
+    }
+
+    public NodoQueja getSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(NodoQueja siguiente) {
+        this.siguiente = siguiente;
+    }
+
     
 }

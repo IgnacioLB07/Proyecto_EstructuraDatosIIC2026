@@ -74,13 +74,94 @@ public class GestorPacientes {
             return nuevo;
         
     }
+    private int contadorPreferenciales = 0;
     
-    public Paciente atenderPaciente(){
-       return null; //Cambiar por código
+    public Paciente atenderPaciente (ColaPacientes colaPreferencial, ColaPacientes colaRegular){
+       Paciente paciente = null;
+
+    try {
+
+        // Si existen pacientes en ambas colas
+        if (!colaPreferencial.esVacia() && !colaRegular.esVacia()) {
+
+            if (contadorPreferenciales < 2) {
+
+                paciente = colaPreferencial.desencolarPaciente();
+                contadorPreferenciales++;
+
+            } else {
+
+                paciente = colaRegular.desencolarPaciente();
+                contadorPreferenciales = 0;
+
+            }
+
+        }
+        // Solo quedan preferenciales
+        else if (!colaPreferencial.esVacia()) {
+
+            paciente = colaPreferencial.desencolarPaciente();
+
+        }
+        // Solo quedan regulares
+        else if (!colaRegular.esVacia()) {
+
+            paciente = colaRegular.desencolarPaciente();
+
+        }
+        // No hay pacientes
+        else {
+
+            System.out.println("No hay pacientes en espera.");
+          
+        }
+
+        System.out.println("Ficha # " + paciente.getFicha()
+                + " con cédula "
+                + paciente.getCedula()
+                + " pasar a consulta médica.");
+
+    } catch (Exception e) {
+
+        System.out.println(e.getMessage());
+
+    }
     }
     
-    public Paciente abandonarCola() {
-        return null; //Cambiar por código
+    public Paciente abandonarCola(ColaPacientes colaPreferencial,
+                          ColaPacientes colaRegular,
+                          PilaQuejas pilaQuejas,
+                          String ficha,
+                          String motivo) {
+       Paciente paciente = null;
+
+    // Buscar primero en la cola preferencial
+    paciente = colaPreferencial.eliminarPorFicha(ficha);
+
+    // Si no está, buscar en la cola regular
+    if (paciente == null) {
+        paciente = colaRegular.eliminarPorFicha(ficha);
+    }
+
+    if (paciente != null) {
+
+        System.out.println("Ficha # "
+                + paciente.getFicha()
+                + " con cédula "
+                + paciente.getCedula()
+                + " abandona la cola sin ser atendido(a).");
+
+        // Crear la queja
+        Queja queja = new Queja(motivo, new Date());
+
+        // Guardarla en la pila
+        pilaQuejas.apilar(queja);
+
+    } else {
+
+        System.out.println("No existe un paciente con esa ficha.");
+
+    }
     }
     
     public String mostrarPacientes() {
