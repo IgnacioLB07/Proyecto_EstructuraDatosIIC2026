@@ -13,13 +13,13 @@ public class Cola {
     //Constructores
     /**
      * Crea una nueva Cola con los parametros ingresados
-     * @param frente 
+     * @param frente primer nodo de la cola
      */
-    public Cola() {}
-
     public Cola(NodoCola frente) {
         this.frente = this.fin = null;
     }
+    
+    public Cola() {}
     
     //Getters & Setters
     /**
@@ -32,7 +32,7 @@ public class Cola {
 
     /**
      * Modifica el frente de la cola
-     * @param frente 
+     * @param frente primer nodo de la cola
      */
     public void setFrente(NodoCola frente) {
         this.frente = frente;
@@ -40,7 +40,7 @@ public class Cola {
 
     /**
      * Obtiene el fin de la cola
-     * @return 
+     * @return fin
      */
     public NodoCola getFin() {
         return fin;
@@ -48,7 +48,7 @@ public class Cola {
 
     /**
      * Modifica el fin de la cola
-     * @param fin 
+     * @param fin ultimo dato de la cola
      */
     public void setFin(NodoCola fin) {
         this.fin = fin;
@@ -57,7 +57,7 @@ public class Cola {
     // Metodos
     /**
      * Método para ingresar un nuevo dato a la cola
-     * @param dato 
+     * @param dato valor del nodo
      */
     public void Encolar(int dato){
         NodoCola nuevo = new NodoCola(dato);
@@ -74,7 +74,7 @@ public class Cola {
     /**
      * Método para eliminar datos de la cola
      * @return aux
-     * @throws Exception 
+     * @throws Exception si la cola esta vacia hay error
      */
     public int Desencolar() throws Exception {
         if (this.esVacia()) { //Significa que la cola esta vacia

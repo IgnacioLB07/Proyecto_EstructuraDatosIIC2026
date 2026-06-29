@@ -16,7 +16,7 @@ public class ColaPacientes extends Cola {
     //Constructores
     /**
      * Crea una cola de pacientes con los datos ingresados
-     * @param frente 
+     * @param frente primer dato de la cola
      */
     public ColaPacientes(NodoPaciente frente) {
         this.frente = this.fin = null;
@@ -28,7 +28,7 @@ public class ColaPacientes extends Cola {
     //Metodos
     /**
      * Método para encolar un paciente a la cola 
-     * @param dato 
+     * @param dato valor del nodo
      */
     public void encolarPaciente(Paciente dato) {
         NodoPaciente nuevo = new NodoPaciente(dato);
@@ -61,7 +61,7 @@ public class ColaPacientes extends Cola {
 
     /**
      * Método para eliminar un paciente por ficha
-     * @param ficha
+     * @param ficha posicion del paciente
      * @return paciente
      */
     public Paciente eliminarPorFicha(String ficha) {

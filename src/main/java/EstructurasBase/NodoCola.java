@@ -15,7 +15,7 @@ public class NodoCola {
     /**
      * Crea un nuevo nodo con los datos ingresados
      *
-     * @param dato
+     * @param dato valor del nodo
      */
     public NodoCola(int dato) {
         this.dato = dato;
@@ -25,7 +25,7 @@ public class NodoCola {
     /**
      * Obtiene el dato del nodo
      *
-     * @return
+     * @return dato
      */
     public int getDato() {
         return dato;
@@ -34,7 +34,7 @@ public class NodoCola {
     /**
      * Modifica el dato del nodo
      *
-     * @param dato
+     * @param dato valor del nodo
      */
     public void setDato(int dato) {
         this.dato = dato;
@@ -43,7 +43,7 @@ public class NodoCola {
     /**
      * Obtiene el dato siguiente del nodo
      *
-     * @return
+     * @return siguiente
      */
     public NodoCola getSiguiente() {
         return siguiente;
@@ -52,7 +52,7 @@ public class NodoCola {
     /**
      * Modifica el dato siguiente del nodo
      *
-     * @param siguiente
+     * @param siguiente valor despues del primer nodo
      */
     public void setSiguiente(NodoCola siguiente) {
         this.siguiente = siguiente;

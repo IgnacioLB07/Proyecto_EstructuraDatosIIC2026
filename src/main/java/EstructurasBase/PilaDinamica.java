@@ -18,7 +18,7 @@ public class PilaDinamica {
     // Getter & Setter
     /**
      * Modifica la cima
-     * @param cima 
+     * @param cima top de la pila
      */
     public void setCima(NodoPilas cima) {
         this.cima = cima;
@@ -36,7 +36,7 @@ public class PilaDinamica {
     /**
      * Método apilar o push. 
      * Permite insertar un elemento (enviado por parámetro) a la pila.
-     * @param valor 
+     * @param valor dato del nodo
      */
     public void apilar(int valor) {
         NodoPilas miNodo = new NodoPilas();
@@ -119,7 +119,7 @@ public class PilaDinamica {
     /**
      * Retorna el tamaño de la Pila.
      * Si la pila está vacía retorna 0.
-     * @return 
+     * @return valor
      */
     public int retornarTamaño() {
 
@@ -142,7 +142,7 @@ public class PilaDinamica {
 
     /**
      * Método recursivo que imprime la EEDD
-     * @param nodo 
+     * @param nodo caja con el dato de la pila
      */
     private void imprimePilaRecursivo(NodoPilas nodo) {
 

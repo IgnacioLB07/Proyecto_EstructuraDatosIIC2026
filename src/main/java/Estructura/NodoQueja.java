@@ -15,7 +15,7 @@ public class NodoQueja {
     //Constructores
     /**
      * Crea un nodo queja con los valores ingresados
-     * @param valor 
+     * @param valor dato del nodo
      */
     public NodoQueja(Queja valor) {
         this.valor = valor;
@@ -34,7 +34,7 @@ public class NodoQueja {
 
     /**
      * Modifica el valor del nodo
-     * @param valor 
+     * @param valor dato del nodo
      */
     public void setValor(Queja valor) {
         this.valor = valor;
@@ -50,7 +50,7 @@ public class NodoQueja {
 
     /**
      * Modifica el valor anterior del nodo
-     * @param anterior 
+     * @param anterior valor del ultimo nod
      */
     public void setAnterior(NodoQueja anterior) {
         this.anterior = anterior;

@@ -19,18 +19,17 @@ public class Queja {
     /**
      * Crea una nueva queja con la información ingresada
      *
-     * @param motivo
-     * @param fechaHoraSalida
+     * @param motivo motivo por el cual se queja
+     * @param fechaHoraSalida fecha y hora de salida TIMESTAMP
      */
-    public Queja() {
-    }
-
     public Queja(String ficha, String cedula, String motivo, Date fechaHoraSalida) {
         this.ficha = ficha;
         this.cedula = cedula;
         this.motivo = motivo;
         this.fechaHoraSalida = fechaHoraSalida;
     }
+    
+    public Queja() {}
 
     //Getters && Setters
     /**
@@ -45,7 +44,7 @@ public class Queja {
     /**
      * Modifica la ficha de la queja
      *
-     * @param ficha
+     * @param ficha posicion del paciente para ser atendido
      */
     public void setFicha(String ficha) {
         this.ficha = ficha;
@@ -61,7 +60,7 @@ public class Queja {
 
     /**
      * Modifica la cedula de la queja
-     * @param cedula 
+     * @param cedula identificacion del paciente
      */
     public void setCedula(String cedula) {
         this.cedula = cedula;
@@ -70,7 +69,7 @@ public class Queja {
     /**
      * Obtiene el motivo de la queja
      *
-     * @return
+     * @return motivo
      */
     public String getMotivo() {
         return motivo;
@@ -79,7 +78,7 @@ public class Queja {
     /**
      * Modifica el motivo de la queja
      *
-     * @param motivo
+     * @param motivo motivo por el cual se queja
      */
     public void setMotivo(String motivo) {
         this.motivo = motivo;
@@ -88,7 +87,7 @@ public class Queja {
     /**
      * Obtiene la fecha de la queja
      *
-     * @return
+     * @return fecha y hora de salida TIMESTAMP
      */
     public Date getFechaHoraSalida() {
         return fechaHoraSalida;
@@ -97,7 +96,7 @@ public class Queja {
     /**
      * Modifica la fecha de la queja
      *
-     * @param fechaHoraSalida
+     * @param fechaHoraSalida fecha y hora de salida TIMESTAMP
      */
     public void setFechaHoraSalida(Date fechaHoraSalida) {
         this.fechaHoraSalida = fechaHoraSalida;

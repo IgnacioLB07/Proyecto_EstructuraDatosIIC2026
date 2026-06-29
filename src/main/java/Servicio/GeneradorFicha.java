@@ -13,8 +13,8 @@ public class GeneradorFicha {
     //Constructores
     /**
      * Crea una ficha con los valores ingresados
-     * @param contadorRegular
-     * @param contadorPreferencial 
+     * @param contadorRegular contador de pacientes Regulares
+     * @param contadorPreferencial contador de pacientes Preferenciales
      */
     public GeneradorFicha(int contadorRegular, int contadorPreferencial) {
         this.contadorRegular = 0;

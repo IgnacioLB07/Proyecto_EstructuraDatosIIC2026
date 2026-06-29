@@ -34,9 +34,9 @@ public class GestorPacientes {
     /**
      * Crea un gestro pacientes con los valores ingresados
      *
-     * @param colaRegular
-     * @param colaPreferencial
-     * @param generadorFicha
+     * @param colaRegular cola de pacientes Regulares
+     * @param colaPreferencial cola de pacientes Preferenciales
+     * @param generadorFicha generador de ficha para los pacientes
      */
     public GestorPacientes(ColaPacientes colaRegular,
             ColaPacientes colaPreferencial, GeneradorFicha generadorFicha) {

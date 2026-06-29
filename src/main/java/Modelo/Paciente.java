@@ -8,7 +8,6 @@ import java.util.Date;
  * las colas de pacientes.
  *
  * @author ignap
- * @version 1.0
  */
 public class Paciente {
 
@@ -23,15 +22,12 @@ public class Paciente {
     /**
      * Crea un nuevo paciente con la información ingresada
      *
-     * @param ficha
-     * @param cedula
-     * @param nombre
-     * @param fechaHoraLlegada
-     * @param tipo
+     * @param ficha posicion del paciente para ser atendido
+     * @param cedula identificacion del paciente
+     * @param nombre nombre del paciente
+     * @param fechaHoraLlegada fecha y hora TIMESTAMP
+     * @param tipo tipo de paciente (Regular o Preferencial)
      */
-    public Paciente() {
-    }
-
     public Paciente(String ficha, String cedula, String nombre,
             Date fechaHoraLlegada, String tipo) {
         this.ficha = ficha;
@@ -40,6 +36,8 @@ public class Paciente {
         this.fechaHoraLlegada = fechaHoraLlegada;
         this.tipo = tipo;
     }
+    
+    public Paciente() {}
 
     //Getters && Setters
     /**
@@ -54,7 +52,7 @@ public class Paciente {
     /**
      * Modifca la ficha del paciente
      *
-     * @param ficha
+     * @param ficha posicion del paciente para ser atendido
      */
     public void setFicha(String ficha) {
         this.ficha = ficha;
@@ -63,7 +61,7 @@ public class Paciente {
     /**
      * Obtiene la cedula del paciente
      *
-     * @return
+     * @return cedula
      */
     public String getCedula() {
         return cedula;
@@ -72,7 +70,7 @@ public class Paciente {
     /**
      * Modifica la cedula del paciente
      *
-     * @param cedula
+     * @param cedula identificacion del paciente
      */
     public void setCedula(String cedula) {
         this.cedula = cedula;
@@ -81,7 +79,7 @@ public class Paciente {
     /**
      * Obtiene el nombre del paciente
      *
-     * @return
+     * @return nombre
      */
     public String getNombre() {
         return nombre;
@@ -90,7 +88,7 @@ public class Paciente {
     /**
      * Modifica el nombre del paciente
      *
-     * @param nombre
+     * @param nombre nombre del paciente
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -99,7 +97,7 @@ public class Paciente {
     /**
      * Obtiene la fecha de llegada del paciente
      *
-     * @return
+     * @return fecha y hora TIMESTAMP
      */
     public Date getFechaHoraLlegada() {
         return fechaHoraLlegada;
@@ -108,7 +106,7 @@ public class Paciente {
     /**
      * Modifica la fecha de llegada del paciente
      *
-     * @param fechaHoraLlegada
+     * @param fechaHoraLlegada fecha y hora TIMESTAMP
      */
     public void setFechaHoraLlegada(Date fechaHoraLlegada) {
         this.fechaHoraLlegada = fechaHoraLlegada;
@@ -117,7 +115,7 @@ public class Paciente {
     /**
      * Obtiene el tipo de paciente
      *
-     * @return
+     * @return tipo
      */
     public String getTipo() {
         return tipo;
@@ -126,7 +124,7 @@ public class Paciente {
     /**
      * Modifica el tipo de paciente
      *
-     * @param tipo
+     * @param tipo tipo de paciente (Regular o Preferencial)
      */
     public void setTipo(String tipo) {
         this.tipo = tipo;

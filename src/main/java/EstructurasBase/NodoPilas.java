@@ -13,18 +13,18 @@ public class NodoPilas {
     //Constructores
     /**
      * Crea un nuevo nodo con los datos ingresados
-     * @param valor 
+     * @param valor dato del nodo
      */
-    public NodoPilas() {}
-
     public NodoPilas(int valor) {
         this.valor = valor;
     }
-
+    
+    public NodoPilas() {}
+    
     //Getters & Setters
     /**
      * Obtiene el valor del nodo
-     * @return 
+     * @return valor
      */
     public int getValor() {
         return valor;
@@ -32,7 +32,7 @@ public class NodoPilas {
 
     /**
      * Obtiene el valor anterior del nodo
-     * @return 
+     * @return anterior
      */
     public NodoPilas getAnterior() {
         return anterior;
@@ -40,7 +40,7 @@ public class NodoPilas {
 
     /**
      * Modifica el valor del nodo
-     * @param valor 
+     * @param valor dato del nodo
      */
     public void setValor(int valor) {
         this.valor = valor;
@@ -48,7 +48,7 @@ public class NodoPilas {
 
     /**
      * Modifica el valor anterior del nodo
-     * @param anterior 
+     * @param anterior una posicion anterior al dato inicial del nodo
      */
     public void setAnterior(NodoPilas anterior) {
         this.anterior = anterior;

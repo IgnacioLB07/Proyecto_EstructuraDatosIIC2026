@@ -16,14 +16,13 @@ public class PilaQuejas extends PilaDinamica {
     /**
      * Crea una pila de quejas con los valores ingresados
      */
-    public PilaQuejas() {
-    }
+    public PilaQuejas() {}
 
     //Metodos
     /**
      * Insertar una queja
      *
-     * @param queja
+     * @param queja motivo de salida del paciente
      */
     public void apilarQueja(Queja queja) {
 
@@ -42,7 +41,6 @@ public class PilaQuejas extends PilaDinamica {
      * Eliminar una queja
      *
      * @return aux
-     * @throws Exception
      */
     public Queja desapilarQueja() {
         if (esVacia()) {
