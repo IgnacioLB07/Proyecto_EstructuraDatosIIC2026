@@ -1,7 +1,7 @@
 package EstructurasBase;
 
 /**
- * 
+ * Clase Nodo que ayuda al funcionamiento de la PilaDinamica
  * @author ignap
  */
 public class NodoPilas {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Estructura;
 
 import Modelo.Paciente;
@@ -15,7 +11,6 @@ import Modelo.Paciente;
  * estructura dinámica ColaPacientes.
  *
  * @author ignap
- * @version 1.0
  */
 public class NodoPaciente {
 

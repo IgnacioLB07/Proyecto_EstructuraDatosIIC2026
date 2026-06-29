@@ -1,32 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Estructura;
 
 import EstructurasBase.Cola;
 import Modelo.Paciente;
 
 /**
- *
+ * Clase hija de Cola, es la base del funcionamiento de Pacientes
  * @author ignap
  */
 public class ColaPacientes extends Cola {
 
     //Atributos
-    NodoPaciente frente;
-    NodoPaciente fin;
+    private NodoPaciente frente;
+    private NodoPaciente fin;
 
     //Constructores
-    public ColaPacientes() {
-    }
-
+    /**
+     * Crea una cola de pacientes con los datos ingresados
+     * @param frente 
+     */
     public ColaPacientes(NodoPaciente frente) {
         this.frente = this.fin = null;
     }
+    
+    public ColaPacientes() {
+    }
 
-    //Getters & Setters
     //Metodos
+    /**
+     * Método para encolar un paciente a la cola 
+     * @param dato 
+     */
     public void encolarPaciente(Paciente dato) {
         NodoPaciente nuevo = new NodoPaciente(dato);
         
@@ -38,9 +41,13 @@ public class ColaPacientes extends Cola {
         this.fin = nuevo;
     }
 
-    public Paciente desencolarPaciente() throws Exception {
+    /**
+     * Método para desencolar un paciente de la cola
+     * @return paciente
+     */
+    public Paciente desencolarPaciente() {
         if (this.esVacia()) { //Significa que la cola esta vacia
-            throw new Exception("LA COLA ESTA VACIA");
+            return null;
         } //De acá en adelante se que la cola contiene elementos
         
         Paciente aux = frente.getDato(); //Guarda el valor del Frente, antes de eliminarlo
@@ -52,6 +59,11 @@ public class ColaPacientes extends Cola {
         return aux; //Retorna el valor que tenia Frente antes de eliminarlo
     }
 
+    /**
+     * Método para eliminar un paciente por ficha
+     * @param ficha
+     * @return paciente
+     */
     public Paciente eliminarPorFicha(String ficha) {
         
         if (esVacia()) {
@@ -89,6 +101,10 @@ public class ColaPacientes extends Cola {
         return null;
     }
 
+    /**
+     * Método que construye el mensaje que se va a mostrar al usuario en el menu
+     * @return msg
+     */
     public String mostrarPaciente() {
         if (esVacia()) {
             return "NO HAY PACIENTES EN LA COLA";
@@ -101,13 +117,24 @@ public class ColaPacientes extends Cola {
         while (actual != null) {            
             Paciente aux = actual.getDato();
             
-            msg +=   "====== MOSTRAR PACIENTE ======"
-                 + "\n Ficha: " + aux.getFicha()
-                 + "\n Céula: " + aux.getCedula()
-                 + "\n Nombre: " + aux.getNombre()
-                 + "\n Fecha y Hora: " + aux.getFechaHoraLlegada()
-                 + "\n Tipo: " + aux.getTipo()
-                 + "\n==============================\n";
+            if (aux.getTipo().equals("Preferencial")) {
+                msg +=   "====== MOSTRAR PACIENTE ======"
+                     + "\n Ficha: <" + aux.getFicha() +">"
+                     + "\n Céula: " + aux.getCedula()
+                     + "\n Nombre: " + aux.getNombre()
+                     + "\n Fecha y Hora: " + aux.getFechaHoraLlegada()
+                     + "\n Tipo: " + aux.getTipo()
+                     + "\n==============================\n";
+                
+            } else {
+                msg +=   "====== MOSTRAR PACIENTE ======"
+                     + "\n Ficha: " + aux.getFicha()
+                     + "\n Céula: " + aux.getCedula()
+                     + "\n Nombre: " + aux.getNombre()
+                     + "\n Fecha y Hora: " + aux.getFechaHoraLlegada()
+                     + "\n Tipo: " + aux.getTipo()
+                     + "\n==============================\n";
+            }
             
             actual = actual.getSiguiente();
         }

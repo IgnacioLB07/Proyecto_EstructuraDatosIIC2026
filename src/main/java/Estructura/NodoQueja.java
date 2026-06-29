@@ -1,36 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Estructura;
 
 import Modelo.Queja;
 
+/**
+ * Clase Nodo que ayuda al funcionamiento de la PilaQueja
+ * @author johan
+ */
 public class NodoQueja {
+
+    //Atributos
+    private Queja valor;
+    private NodoQueja anterior;
+
+    //Constructores
+    /**
+     * Crea un nodo queja con los valores ingresados
+     * @param valor 
+     */
+    public NodoQueja(Queja valor) {
+        this.valor = valor;
+    }
     
-    private Queja dato;
-    private NodoQueja siguiente;
+    public NodoQueja() {}
 
-    public NodoQueja(Queja dato) {
-        this.dato = dato;
-        this.siguiente = null;
+    //Getters & Setters
+    /**
+     * Obtiene el valor del nodo
+     * @return valor del nodo
+     */
+    public Queja getValor() {
+        return valor;
     }
 
-    public Queja getDato() {
-        return dato;
+    /**
+     * Modifica el valor del nodo
+     * @param valor 
+     */
+    public void setValor(Queja valor) {
+        this.valor = valor;
     }
 
-    public void setDato(Queja dato) {
-        this.dato = dato;
+    /**
+     * Obtiene el valor anterior del nodo
+     * @return nodo anterior
+     */
+    public NodoQueja getAnterior() {
+        return anterior;
     }
 
-    public NodoQueja getSiguiente() {
-        return siguiente;
+    /**
+     * Modifica el valor anterior del nodo
+     * @param anterior 
+     */
+    public void setAnterior(NodoQueja anterior) {
+        this.anterior = anterior;
     }
 
-    public void setSiguiente(NodoQueja siguiente) {
-        this.siguiente = siguiente;
-    }
-
-    
 }

@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Menu;
 
-/**
- *
- * @author ignap
- */
 import javax.swing.JOptionPane;
 
 /**
  * Muestra el menú de principal del sistema
- * @author ignap
+ * @author nelson
  */
 public class MenuPrincipal {
 
@@ -79,7 +71,7 @@ public class MenuPrincipal {
               + "Colaboradores: \n"
               + "Ignacio R. Leitón Benavides \n"
               + "Johan Rodriguez Chaves \n"
-              + "NOMBRE Y APELLIDO \n"
+              + "Nelsonc Latino Valverde \n"
         );
     }
 }

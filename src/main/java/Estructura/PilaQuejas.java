@@ -1,86 +1,108 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Estructura;
 
+import EstructurasBase.PilaDinamica;
 import Modelo.Queja;
 
-public class PilaQuejas {
-    
-  private NodoQueja cima;
+/**
+ * Clase hija de PilaDinamica, es la base del funcionamiento de Quejas
+ * @author johan
+ */
+public class PilaQuejas extends PilaDinamica {
 
+    //Atributos
+    private NodoQueja cima;
+
+    //Constructores
+    /**
+     * Crea una pila de quejas con los valores ingresados
+     */
     public PilaQuejas() {
-        cima = null;
     }
 
-    public boolean esVacia() {
-        return cima == null;
-    }
+    //Metodos
+    /**
+     * Insertar una queja
+     *
+     * @param queja
+     */
+    public void apilarQueja(Queja queja) {
 
-    // Insertar una queja
-    public void apilar(Queja queja) {
+        NodoQueja nuevo = new NodoQueja();
+        nuevo.setValor(queja);
 
-        NodoQueja nuevo = new NodoQueja(queja);
-
-        nuevo.setSiguiente(cima);
-
-        cima = nuevo;
-
-    }
-
-    // Eliminar una queja
-    public Queja desapilar() throws Exception {
-
-        if (esVacia()) {
-            throw new Exception("La pila está vacía.");
+        if (esVacia()) { // Caso 1: Si la pila está vacía.
+            cima = nuevo;
+        } else {  // Caso 2: Si la pila tiene elementos.
+            nuevo.setAnterior(cima);     // Amarro eñ muevo Nodo al resto de la pila.
+            cima = nuevo;      //Muevo la devuelveCima al nuevo Nodo para tener una nueva devuelveCima.
         }
-
-        Queja aux = cima.getDato();
-
-        cima = cima.getSiguiente();
-
-        return aux;
-
     }
 
-    // Ver la última queja
-    public Queja cima() {
-
+    /**
+     * Eliminar una queja
+     *
+     * @return aux
+     * @throws Exception
+     */
+    public Queja desapilarQueja() {
         if (esVacia()) {
             return null;
+        } else {
+            Queja aux = cima.getValor();   // Creo un puntero temporal y lo igual a la devuelveCima.
+            cima = cima.getAnterior();   // Muevo la devuelveCima al de bajo para poder eliminar el de arriba.
+            return aux;
         }
-
-        return cima.getDato();
-
     }
 
-    // Mostrar todas las quejas
-    public String mostrarQuejas() {
+    /**
+     * Ver la última queja
+     *
+     * @return Valor de la devuelveCima
+     */
+    public Queja devuelveQueja() {
+        if (esVacia()) {
+            return null;
+        } else {
+            return cima.getValor();
+        }
+    }
 
+    /**
+     * Mostrar todas las quejas
+     *
+     * @return msg
+     */
+    public String mostrarQuejas() {
         if (esVacia()) {
             return "No existen quejas.";
         }
 
         String msg = "";
-
         NodoQueja actual = cima;
 
         while (actual != null) {
+            Queja q = actual.getValor();
 
-            Queja q = actual.getDato();
+            msg +=    "======== MOSTRAR QUEJA ========\n"
+                    + "Ficha #" + q.getFicha() + "\n"
+                    + "Con cédula: " + q.getCedula() +"\n"
+                    + "Abandona la cola sin ser atendido(a)" + "\n"
+                    + "A la Fecha y Hora: " + q.getFechaHoraSalida() + "\n"
+                    + "Por el Motivo: " + q.getMotivo() + "\n"
+                    + "=============================\n\n";
 
-            msg += "=============================\n";
-            msg += "Motivo: " + q.getMotivo() + "\n";
-            msg += "Fecha: " + q.getFechaHoraSalida() + "\n";
-            msg += "=============================\n\n";
-
-            actual = actual.getSiguiente();
-
+            actual = actual.getAnterior();
         }
 
         return msg;
+    }
 
-    }  
-    
+    /**
+     * Método que retorna true si la pila está vacía o false si tiene elementos.
+     *
+     * @return true/false
+     */
+    public boolean esVacia() {
+        return cima == null;
+    }
 }
