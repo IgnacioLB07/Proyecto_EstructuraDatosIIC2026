@@ -10,8 +10,16 @@ package Menu;
  */
 import javax.swing.JOptionPane;
 
+/**
+ * Muestra el menú de principal del sistema
+ * @author ignap
+ */
 public class MenuPrincipal {
 
+    /**
+     * Muestra el menú con JOptionPane
+     * y permite elegir la función con do while y switch
+     */
     public void mostrarMenuPrincipal() {
         
         MenuPacientes menuP = new MenuPacientes();
@@ -59,6 +67,9 @@ public class MenuPrincipal {
         } while (opcion != 3);
     }
     
+    /**
+     * Muestra un submenu de Ayuda con la versión del sistema y los colaboradores
+     */
     public void mostrarAyuda() {
         JOptionPane.showMessageDialog(null,
                 "=================================\n"
@@ -67,7 +78,6 @@ public class MenuPrincipal {
               + "Avance 1 V 1.0.N (N numero de avances internos)\n"
               + "Colaboradores: \n"
               + "Ignacio R. Leitón Benavides \n"
-              + "NOMBRE Y APELLIDO \n"
               + "NOMBRE Y APELLIDO \n"
               + "NOMBRE Y APELLIDO \n"
         );

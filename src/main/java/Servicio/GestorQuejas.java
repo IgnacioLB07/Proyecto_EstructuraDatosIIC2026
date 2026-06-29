@@ -5,7 +5,7 @@
 package Servicio;
 
 /**
- *
+ * Gestiona las quejas del sistema hospitalario
  * @author ignap
  */
 public class GestorQuejas {

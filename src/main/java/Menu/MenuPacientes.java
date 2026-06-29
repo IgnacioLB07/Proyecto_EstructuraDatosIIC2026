@@ -10,8 +10,16 @@ package Menu;
  */
 import javax.swing.JOptionPane;
 
+/**
+ * Muestra el menú de gestión de pacientes
+ * @author ignap
+ */
 public class MenuPacientes {
 
+    /**
+     * Muestra el menú con JOptionPane
+     * y permite elegir la función con do while y switch
+     */
     public void mostrarMenu() {
 
         int opcion;

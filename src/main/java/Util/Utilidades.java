@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Servicio;
+package Util;
 
 /**
- * Gestiona los/as pacientes del sistema hospitalario
+ * Clase para métodos de apoyo y otras funciones secundarias
  * @author ignap
  */
-public class GestorPacientes {
+public class Utilidades {
     
 }

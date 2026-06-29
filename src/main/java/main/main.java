@@ -7,7 +7,7 @@ package main;
 import Menu.MenuPrincipal;
 
 /**
- *
+ * Inicializa el sistema
  * @author ignap
  */
 public class main {

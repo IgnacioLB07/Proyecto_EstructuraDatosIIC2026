@@ -6,7 +6,7 @@ package Modelo;
 
 import java.time.LocalDate;
 /**
- *
+ * Representa una queja registrada en el sistema del hospital
  * @author ignap
  */
 public class Queja 
@@ -16,6 +16,12 @@ public class Queja
     private LocalDate fechaHoraSalida;
     
     //Constructores
+
+    /**
+     * Crea una nueva queja con la información ingresada
+     * @param motivo
+     * @param fechaHoraSalida 
+     */
     public Queja() {}
 
     public Queja(String motivo, LocalDate fechaHoraSalida) {
@@ -25,18 +31,34 @@ public class Queja
     
     //Getters && Setters
 
+    /**
+     * Obtiene el motivo de la queja
+     * @return 
+     */
     public String getMotivo() {
         return motivo;
     }
 
+    /**
+     * Modifica el motivo de la queja
+     * @param motivo 
+     */
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
 
+    /**
+     * Obtiene la fecha de la queja
+     * @return 
+     */
     public LocalDate getFechaHoraSalida() {
         return fechaHoraSalida;
     }
 
+    /**
+     * Modifica la fecha de la queja
+     * @param fechaHoraSalida 
+     */
     public void setFechaHoraSalida(LocalDate fechaHoraSalida) {
         this.fechaHoraSalida = fechaHoraSalida;
     }
