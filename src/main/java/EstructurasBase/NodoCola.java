@@ -2,6 +2,7 @@ package EstructurasBase;
 
 /**
  * Clase Nodo que ayuda al funcionamiento de la Cola
+ *
  * @author ignap
  */
 public class NodoCola {
@@ -13,7 +14,8 @@ public class NodoCola {
     //Constructores
     /**
      * Crea un nuevo nodo con los datos ingresados
-     * @param dato 
+     *
+     * @param dato
      */
     public NodoCola(int dato) {
         this.dato = dato;
@@ -22,7 +24,8 @@ public class NodoCola {
     //Getters & Setters
     /**
      * Obtiene el dato del nodo
-     * @return 
+     *
+     * @return
      */
     public int getDato() {
         return dato;
@@ -30,7 +33,8 @@ public class NodoCola {
 
     /**
      * Modifica el dato del nodo
-     * @param dato 
+     *
+     * @param dato
      */
     public void setDato(int dato) {
         this.dato = dato;
@@ -38,7 +42,8 @@ public class NodoCola {
 
     /**
      * Obtiene el dato siguiente del nodo
-     * @return 
+     *
+     * @return
      */
     public NodoCola getSiguiente() {
         return siguiente;
@@ -46,7 +51,8 @@ public class NodoCola {
 
     /**
      * Modifica el dato siguiente del nodo
-     * @param siguiente 
+     *
+     * @param siguiente
      */
     public void setSiguiente(NodoCola siguiente) {
         this.siguiente = siguiente;

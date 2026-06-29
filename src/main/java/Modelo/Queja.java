@@ -4,7 +4,7 @@
  */
 package Modelo;
 
-import java.time.LocalDate;
+import java.util.Date;
 /**
  * Representa una queja registrada en el sistema del hospital
  * @author ignap
@@ -13,7 +13,7 @@ public class Queja
 {
     //Atributos
     private String motivo;
-    private LocalDate fechaHoraSalida;
+    private Date fechaHoraSalida;
     
     //Constructores
 
@@ -24,7 +24,7 @@ public class Queja
      */
     public Queja() {}
 
-    public Queja(String motivo, LocalDate fechaHoraSalida) {
+    public Queja(String motivo, Date fechaHoraSalida) {
         this.motivo = motivo;
         this.fechaHoraSalida = fechaHoraSalida;
     }
@@ -51,7 +51,7 @@ public class Queja
      * Obtiene la fecha de la queja
      * @return 
      */
-    public LocalDate getFechaHoraSalida() {
+    public Date getFechaHoraSalida() {
         return fechaHoraSalida;
     }
 
@@ -59,7 +59,7 @@ public class Queja
      * Modifica la fecha de la queja
      * @param fechaHoraSalida 
      */
-    public void setFechaHoraSalida(LocalDate fechaHoraSalida) {
+    public void setFechaHoraSalida(Date fechaHoraSalida) {
         this.fechaHoraSalida = fechaHoraSalida;
     }
 }
