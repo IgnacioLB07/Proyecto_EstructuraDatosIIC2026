@@ -1,5 +1,6 @@
 package Menu;
 
+import Estructura.ColaPacientes;
 import Modelo.Paciente;
 import Servicio.GestorPacientes;
 import javax.swing.JOptionPane;
@@ -205,11 +206,63 @@ public class MenuPacientes {
      * Método para mostrar los pacientes pendientes por atender
      */
     private void mostrarPacientesPendientes() {
-        JOptionPane.showMessageDialog(null, gestorP.mostrarPacientes());
+        
+        ColaPacientes cola;
+        
+        int inicio;
+        int total;
+        
+        cola = gestorP.getColaPreferencial();
+        total = cola.contarPacientes();
+        
+        inicio = 0;
+        
+        if (total == 0) {
+            JOptionPane.showMessageDialog(null, "No hay Pacientes en la Cola Preferencial.");
+        }
+        
+        while (inicio < total) {            
+            JOptionPane.showMessageDialog(null, "====== COLA PREFERENCIAL ======\n\n"
+                                                + cola.mostrarPaciente(inicio, 2));
+            
+            inicio += 2;
+        }
+                
+        cola = gestorP.getColaRegular();
+        total = cola.contarPacientes();
+        
+        inicio = 0;
+        
+        if (total == 0) {
+            JOptionPane.showMessageDialog(null, "No hay Pacientes en la Cola Regular.");
+        }
+        while (inicio < total) {            
+            JOptionPane.showMessageDialog(null, "====== COLA REGULAR ======\n\n"
+                                                + cola.mostrarPaciente(inicio, 2));
+            
+            inicio += 2;
+        }
+        
     }
     
+    /*
+    * Método para mostrar las quejas recibidas de los pacientes
+    */
     private void mostrarQuejas() {
-        JOptionPane.showMessageDialog(null, gestorP.getGestorQ().mostrarQuejas());
+        
+        int total = gestorP.getGestorQ().contarQuejas();
+        int inicio = 0;
+        
+        if (total == 0) {
+            JOptionPane.showMessageDialog(null, "No existen Quejas registradas.");
+            return;
+        }
+        
+        while (inicio < total) {            
+            JOptionPane.showMessageDialog(null, gestorP.getGestorQ().mostrarQuejas(inicio, 2));
+            
+            inicio += 2;
+        }
     }
     
 }

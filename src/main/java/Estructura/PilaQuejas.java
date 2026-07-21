@@ -5,6 +5,7 @@ import Modelo.Queja;
 
 /**
  * Clase hija de PilaDinamica, es la base del funcionamiento de Quejas
+ *
  * @author johan
  */
 public class PilaQuejas extends PilaDinamica {
@@ -16,7 +17,8 @@ public class PilaQuejas extends PilaDinamica {
     /**
      * Crea una pila de quejas con los valores ingresados
      */
-    public PilaQuejas() {}
+    public PilaQuejas() {
+    }
 
     //Metodos
     /**
@@ -81,14 +83,58 @@ public class PilaQuejas extends PilaDinamica {
         while (actual != null) {
             Queja q = actual.getValor();
 
-            msg +=    "======== MOSTRAR QUEJA ========\n"
-                    + "Ficha #" + q.getFicha() + "\n"
-                    + "Con cédula: " + q.getCedula() +"\n"
+            msg += "======== MOSTRAR QUEJA ========\n"
+                    + "Ficha: " + q.getFicha() + "\n"
+                    + "Con cédula: " + q.getCedula() + "\n"
                     + "Abandona la cola sin ser atendido(a)" + "\n"
                     + "A la Fecha y Hora: " + q.getFechaHoraSalida() + "\n"
                     + "Por el Motivo: " + q.getMotivo() + "\n"
                     + "=============================\n\n";
 
+            actual = actual.getAnterior();
+        }
+
+        return msg;
+    }
+
+    /**
+     * Muestra una cantidad específica de quejas a partir de una posición
+     * determinada de la pila.
+     *
+     * @param inicio Posición desde la cual iniciar el recorrido.
+     * @param cantidad Cantidad máxima de quejas a mostrar.
+     * @return Información de las quejas solicitadas.
+     */
+    public String mostrarQuejas(int inicio, int cantidad) {
+
+        if (esVacia()) {
+            return "NO EXISTEN QUEJAS.";
+        }
+
+        String msg = "";
+
+        NodoQueja actual = cima;
+
+        int indice = 0;
+        int mostradas = 0;
+
+        while (actual != null && mostradas < cantidad) {
+
+            if (indice >= inicio) {
+
+                Queja q = actual.getValor();
+
+                msg +=    "Ficha: " + q.getFicha() + "\n"
+                        + "Con Cédula: " + q.getCedula() + "\n"
+                        + "Abandona la cola sin ser atendido(a)" + "\n"
+                        + "A la Fecha y Hora: " + q.getFechaHoraSalida() + "\n"
+                        + "Por el Motivo: " + q.getMotivo() + "\n"
+                        + "============================\n\n";
+
+                mostradas++;
+            }
+
+            indice++;
             actual = actual.getAnterior();
         }
 
@@ -102,5 +148,24 @@ public class PilaQuejas extends PilaDinamica {
      */
     public boolean esVacia() {
         return cima == null;
+    }
+
+    /**
+     * Cuenta la cantidad de quejas almacenadas en la pila.
+     *
+     * @return Cantidad de quejas registradas.
+     */
+    public int contarQuejas() {
+
+        int contador = 0;
+
+        NodoQueja actual = cima;
+
+        while (actual != null) {
+            contador++;
+            actual = actual.getAnterior();
+        }
+
+        return contador;
     }
 }

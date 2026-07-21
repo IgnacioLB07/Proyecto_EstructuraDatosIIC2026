@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Gestiona las quejas del sistema hospitalario
+ *
  * @author johan
  */
 public class GestorQuejas {
@@ -56,9 +57,20 @@ public class GestorQuejas {
      */
     public String mostrarQuejas() {
         String msg = "========== PILA QUEJAS ==========\n"
-                    +pilaQuejas.mostrarQuejas();
-                
+                + pilaQuejas.mostrarQuejas();
+
         return msg;
+    }
+
+    /**
+     * Obtiene una cantidad determinada de quejas.
+     *
+     * @param inicio Posición inicial.
+     * @param cantidad Cantidad máxima de quejas.
+     * @return Información de las quejas.
+     */
+    public String mostrarQuejas(int inicio, int cantidad) {
+        return pilaQuejas.mostrarQuejas(inicio, cantidad);
     }
 
     /**
@@ -72,18 +84,29 @@ public class GestorQuejas {
 
     /**
      * Verificar si la pila está vacía
+     *
      * @return true/false
-     */ 
+     */
     public boolean hayQuejas() {
         return !pilaQuejas.esVacia();
     }
 
     /**
      * Obtiene las pila de quejas
+     *
      * @return pilaQuejas
      */
     public PilaQuejas getPilaQuejas() {
         return pilaQuejas;
+    }
+
+    /**
+     * Obtiene la cantidad de quejas registradas.
+     *
+     * @return Cantidad de quejas.
+     */
+    public int contarQuejas() {
+        return pilaQuejas.contarQuejas();
     }
 
 }

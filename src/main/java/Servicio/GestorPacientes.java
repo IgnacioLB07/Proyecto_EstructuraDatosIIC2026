@@ -66,12 +66,13 @@ public class GestorPacientes {
 
     /**
      * Obtiene el gestor de quejas asociado al gestor de pacientes
+     *
      * @return gestorQ
      */
     public GestorQuejas getGestorQ() {
         return gestorQ;
     }
-    
+
     //Metodos
     /**
      * Método para crear fichas
@@ -171,11 +172,21 @@ public class GestorPacientes {
      */
     public String mostrarPacientes() {
         String msg = "==== COLA PREFERENCIALES ====\n\n"
-                    + colaPreferencial.mostrarPaciente()
-                    +"\n"
-                    +"====== COLA  REGULARES ======\n\n"
-                    + colaRegular.mostrarPaciente();
-        
+                + colaPreferencial.mostrarPaciente()
+                + "\n"
+                + "====== COLA  REGULARES ======\n\n"
+                + colaRegular.mostrarPaciente();
+
         return msg;
+    }
+
+    /**
+     * Obtiene la cantidad total de pacientes pendientes.
+     *
+     * @return Cantidad total de pacientes.
+     */
+    public int totalPacientes() {
+        return colaPreferencial.contarPacientes()
+                + colaRegular.contarPacientes();
     }
 }
