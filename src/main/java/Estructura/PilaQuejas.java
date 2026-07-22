@@ -1,171 +1,194 @@
 package Estructura;
 
-import EstructurasBase.PilaDinamica;
 import Modelo.Queja;
 
 /**
- * Clase hija de PilaDinamica, es la base del funcionamiento de Quejas
+ * Pila dinámica utilizada para almacenar las quejas.
  *
- * @author johan
+ * @author nelson
  */
-public class PilaQuejas extends PilaDinamica {
+public class PilaQuejas {
 
-    //Atributos
+    // Nodo ubicado en la cima de la pila
     private NodoQueja cima;
 
-    //Constructores
     /**
-     * Crea una pila de quejas con los valores ingresados
+     * Constructor de la pila.
      */
     public PilaQuejas() {
+        cima = null;
     }
 
-    //Metodos
     /**
-     * Insertar una queja
+     * Agrega una queja en la cima de la pila.
      *
-     * @param queja motivo de salida del paciente
+     * @param queja queja que se desea almacenar
      */
     public void apilarQueja(Queja queja) {
 
-        NodoQueja nuevo = new NodoQueja();
-        nuevo.setValor(queja);
-
-        if (esVacia()) { // Caso 1: Si la pila está vacía.
-            cima = nuevo;
-        } else {  // Caso 2: Si la pila tiene elementos.
-            nuevo.setAnterior(cima);     // Amarro eñ muevo Nodo al resto de la pila.
-            cima = nuevo;      //Muevo la devuelveCima al nuevo Nodo para tener una nueva devuelveCima.
+        if (queja == null) {
+            return;
         }
+
+        NodoQueja nuevoNodo = new NodoQueja();
+
+        nuevoNodo.setValor(queja);
+        nuevoNodo.setAnterior(cima);
+
+        cima = nuevoNodo;
     }
 
     /**
-     * Eliminar una queja
+     * Elimina y devuelve la última queja registrada.
      *
-     * @return aux
+     * @return queja eliminada o null si la pila está vacía
      */
     public Queja desapilarQueja() {
+
         if (esVacia()) {
             return null;
-        } else {
-            Queja aux = cima.getValor();   // Creo un puntero temporal y lo igual a la devuelveCima.
-            cima = cima.getAnterior();   // Muevo la devuelveCima al de bajo para poder eliminar el de arriba.
-            return aux;
         }
+
+        Queja quejaEliminada = cima.getValor();
+
+        cima = cima.getAnterior();
+
+        return quejaEliminada;
     }
 
     /**
-     * Ver la última queja
+     * Devuelve la última queja sin eliminarla.
      *
-     * @return Valor de la devuelveCima
+     * @return última queja registrada
      */
     public Queja devuelveQueja() {
+
         if (esVacia()) {
             return null;
-        } else {
-            return cima.getValor();
         }
+
+        return cima.getValor();
     }
 
     /**
-     * Mostrar todas las quejas
+     * Determina si la pila está vacía.
      *
-     * @return msg
-     */
-    public String mostrarQuejas() {
-        if (esVacia()) {
-            return "No existen quejas.";
-        }
-
-        String msg = "";
-        NodoQueja actual = cima;
-
-        while (actual != null) {
-            Queja q = actual.getValor();
-
-            msg += "======== MOSTRAR QUEJA ========\n"
-                    + "Ficha: " + q.getFicha() + "\n"
-                    + "Con cédula: " + q.getCedula() + "\n"
-                    + "Abandona la cola sin ser atendido(a)" + "\n"
-                    + "A la Fecha y Hora: " + q.getFechaHoraSalida() + "\n"
-                    + "Por el Motivo: " + q.getMotivo() + "\n"
-                    + "=============================\n\n";
-
-            actual = actual.getAnterior();
-        }
-
-        return msg;
-    }
-
-    /**
-     * Muestra una cantidad específica de quejas a partir de una posición
-     * determinada de la pila.
-     *
-     * @param inicio Posición desde la cual iniciar el recorrido.
-     * @param cantidad Cantidad máxima de quejas a mostrar.
-     * @return Información de las quejas solicitadas.
-     */
-    public String mostrarQuejas(int inicio, int cantidad) {
-
-        if (esVacia()) {
-            return "NO EXISTEN QUEJAS.";
-        }
-
-        String msg = "";
-
-        NodoQueja actual = cima;
-
-        int indice = 0;
-        int mostradas = 0;
-
-        while (actual != null && mostradas < cantidad) {
-
-            if (indice >= inicio) {
-
-                Queja q = actual.getValor();
-
-                msg +=    "Ficha: " + q.getFicha() + "\n"
-                        + "Con Cédula: " + q.getCedula() + "\n"
-                        + "Abandona la cola sin ser atendido(a)" + "\n"
-                        + "A la Fecha y Hora: " + q.getFechaHoraSalida() + "\n"
-                        + "Por el Motivo: " + q.getMotivo() + "\n"
-                        + "============================\n\n";
-
-                mostradas++;
-            }
-
-            indice++;
-            actual = actual.getAnterior();
-        }
-
-        return msg;
-    }
-
-    /**
-     * Método que retorna true si la pila está vacía o false si tiene elementos.
-     *
-     * @return true/false
+     * @return true si está vacía; false si contiene quejas
      */
     public boolean esVacia() {
         return cima == null;
     }
 
     /**
-     * Cuenta la cantidad de quejas almacenadas en la pila.
+     * Cuenta las quejas registradas.
      *
-     * @return Cantidad de quejas registradas.
+     * @return cantidad de quejas
      */
     public int contarQuejas() {
 
         int contador = 0;
 
-        NodoQueja actual = cima;
+        NodoQueja auxiliar = cima;
 
-        while (actual != null) {
+        while (auxiliar != null) {
+
             contador++;
-            actual = actual.getAnterior();
+
+            auxiliar = auxiliar.getAnterior();
         }
 
         return contador;
+    }
+
+    /**
+     * Muestra todas las quejas registradas.
+     *
+     * @return información de las quejas
+     */
+    public String mostrarQuejas() {
+
+        return mostrarQuejas(0, contarQuejas());
+    }
+
+    /**
+     * Muestra las quejas mediante paginación.
+     *
+     * @param inicio posición desde la que se empieza a mostrar
+     * @param cantidad cantidad máxima de quejas
+     * @return información de las quejas
+     */
+    public String mostrarQuejas(int inicio, int cantidad) {
+
+        if (esVacia()) {
+            return "No existen quejas registradas.";
+        }
+
+        if (inicio < 0) {
+            inicio = 0;
+        }
+
+        if (cantidad <= 0) {
+            return "No hay quejas para mostrar.";
+        }
+
+        String mensaje = "";
+
+        NodoQueja auxiliar = cima;
+
+        int posicion = 0;
+        int mostradas = 0;
+
+        while (auxiliar != null && mostradas < cantidad) {
+
+            if (posicion >= inicio) {
+
+                Queja queja = auxiliar.getValor();
+
+                mensaje += "QUEJA REGISTRADA\n";
+                mensaje += "Ficha: "
+                        + queja.getFicha() + "\n";
+
+                mensaje += "Cédula: "
+                        + queja.getCedula() + "\n";
+
+                mensaje += "Motivo: "
+                        + queja.getMotivo() + "\n";
+
+                mensaje += "Fecha y hora de salida: "
+                        + queja.getFechaHoraSalida() + "\n";
+
+                mensaje += "-----------------------------\n\n";
+
+                mostradas++;
+            }
+
+            posicion++;
+
+            auxiliar = auxiliar.getAnterior();
+        }
+
+        if (mensaje.isEmpty()) {
+            return "No existen quejas en esa posición.";
+        }
+
+        return mensaje;
+    }
+
+    /**
+     * Obtiene la cima de la pila.
+     *
+     * @return nodo ubicado en la cima
+     */
+    public NodoQueja getCima() {
+        return cima;
+    }
+
+    /**
+     * Modifica la cima de la pila.
+     *
+     * @param cima nueva cima
+     */
+    public void setCima(NodoQueja cima) {
+        this.cima = cima;
     }
 }
