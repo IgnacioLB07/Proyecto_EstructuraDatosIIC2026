@@ -6,107 +6,172 @@ import Modelo.Queja;
 import java.util.Date;
 
 /**
- * Gestiona las quejas del sistema hospitalario
+ * Clase encargada de gestionar las quejas de los pacientes.
  *
- * @author johan
+ * @author nelson
  */
 public class GestorQuejas {
 
-    //Atributos
     private PilaQuejas pilaQuejas;
 
-    // Constructores
     /**
-     * Crea una pila de Quejas con los valores ingresados
+     * Constructor.
      */
     public GestorQuejas() {
+
         pilaQuejas = new PilaQuejas();
     }
 
-    //Métodos
     /**
-     * Registra una queja existente en la pila de quejas.
+     * Registra una queja utilizando los datos de un paciente.
      *
-     * @param queja Queja que se desea almacenar.
+     * @param paciente paciente que abandonó la cola
+     * @param motivo motivo de la queja
+     * @return true si la queja fue registrada
      */
-    public void registrarQueja(Queja queja) {
-        pilaQuejas.apilarQueja(queja);
-    }
+    public boolean registrarQueja(
+            Paciente paciente,
+            String motivo) {
 
-    /**
-     * Crea y registra una nueva queja a partir de un paciente que abandonó la
-     * cola de espera.
-     *
-     * @param paciente Paciente que abandona la cola.
-     * @param motivo Motivo indicado por el paciente.
-     */
-    public void registrarQueja(Paciente paciente, String motivo) {
-        Queja nueva = new Queja(
+        if (paciente == null
+                || motivo == null
+                || motivo.trim().isEmpty()) {
+
+            return false;
+        }
+
+        Queja nuevaQueja = new Queja(
                 paciente.getFicha(),
                 paciente.getCedula(),
-                motivo,
-                new Date());
+                motivo.trim(),
+                new Date()
+        );
 
-        pilaQuejas.apilarQueja(nueva);
+        pilaQuejas.apilarQueja(nuevaQueja);
+
+        return true;
     }
 
     /**
-     * Retorna todas las quejas registradas en formato de texto.
+     * Registra una queja mediante ficha y cédula.
      *
-     * @return Información de las quejas almacenadas.
+     * @param ficha ficha del paciente
+     * @param cedula cédula del paciente
+     * @param motivo motivo de la queja
+     * @return true si se registró correctamente
      */
-    public String mostrarQuejas() {
-        String msg = "========== PILA QUEJAS ==========\n"
-                + pilaQuejas.mostrarQuejas();
+    public boolean registrarQueja(
+            String ficha,
+            String cedula,
+            String motivo) {
 
-        return msg;
+        if (ficha == null
+                || ficha.trim().isEmpty()
+                || cedula == null
+                || cedula.trim().isEmpty()
+                || motivo == null
+                || motivo.trim().isEmpty()) {
+
+            return false;
+        }
+
+        Queja nuevaQueja = new Queja(
+                ficha.trim(),
+                cedula.trim(),
+                motivo.trim(),
+                new Date()
+        );
+
+        pilaQuejas.apilarQueja(nuevaQueja);
+
+        return true;
     }
 
     /**
-     * Obtiene una cantidad determinada de quejas.
+     * Elimina la última queja registrada.
      *
-     * @param inicio Posición inicial.
-     * @param cantidad Cantidad máxima de quejas.
-     * @return Información de las quejas.
+     * @return queja eliminada
      */
-    public String mostrarQuejas(int inicio, int cantidad) {
-        return pilaQuejas.mostrarQuejas(inicio, cantidad);
-    }
+    public Queja eliminarUltimaQueja() {
 
-    /**
-     * Obtiene y elimina la última queja registrada.
-     *
-     * @return La última queja almacenada o {@code null} si la pila está vacía.
-     */
-    public Queja obtenerUltimaQueja() {
         return pilaQuejas.desapilarQueja();
     }
 
     /**
-     * Verificar si la pila está vacía
+     * Obtiene la última queja sin eliminarla.
      *
-     * @return true/false
+     * @return última queja registrada
      */
-    public boolean hayQuejas() {
-        return !pilaQuejas.esVacia();
+    public Queja obtenerUltimaQueja() {
+
+        return pilaQuejas.devuelveQueja();
     }
 
     /**
-     * Obtiene las pila de quejas
+     * Muestra todas las quejas.
      *
-     * @return pilaQuejas
+     * @return información de las quejas
+     */
+    public String mostrarQuejas() {
+
+        return pilaQuejas.mostrarQuejas();
+    }
+
+    /**
+     * Muestra las quejas mediante paginación.
+     *
+     * @param inicio posición inicial
+     * @param cantidad cantidad por mostrar
+     * @return información de las quejas
+     */
+    public String mostrarQuejas(
+            int inicio,
+            int cantidad) {
+
+        return pilaQuejas.mostrarQuejas(
+                inicio,
+                cantidad
+        );
+    }
+
+    /**
+     * Cuenta las quejas registradas.
+     *
+     * @return cantidad de quejas
+     */
+    public int contarQuejas() {
+
+        return pilaQuejas.contarQuejas();
+    }
+
+    /**
+     * Determina si existen quejas.
+     *
+     * @return true si no existen quejas
+     */
+    public boolean esVacia() {
+
+        return pilaQuejas.esVacia();
+    }
+
+    /**
+     * Obtiene la pila de quejas.
+     *
+     * @return pila de quejas
      */
     public PilaQuejas getPilaQuejas() {
+
         return pilaQuejas;
     }
 
     /**
-     * Obtiene la cantidad de quejas registradas.
+     * Modifica la pila de quejas.
      *
-     * @return Cantidad de quejas.
+     * @param pilaQuejas nueva pila
      */
-    public int contarQuejas() {
-        return pilaQuejas.contarQuejas();
-    }
+    public void setPilaQuejas(
+            PilaQuejas pilaQuejas) {
 
+        this.pilaQuejas = pilaQuejas;
+    }
 }
