@@ -1,191 +1,474 @@
 package Servicio;
 
 import Estructura.ColaPacientes;
+import Estructura.ListaBitacora;
+import Estructura.ListaExpedientes;
+import Modelo.BitacoraCita;
+import Modelo.Cita;
+import Modelo.ExpedientePaciente;
+import Modelo.Medicamento;
 import Modelo.Paciente;
-import Modelo.Queja;
 import java.util.Date;
 
 /**
- * Gestiona los/as pacientes del sistema hospitalario
+ * Gestiona las colas, expedientes y atención de pacientes.
  *
- * @author ignap
+ * @author nelson
  */
 public class GestorPacientes {
 
-    //Atributos
     private ColaPacientes colaRegular;
     private ColaPacientes colaPreferencial;
+
     private GeneradorFicha generadorFicha;
 
-    private int contadorPreferenciales = 0;
+    private int contadorPreferenciales;
+
     private GestorQuejas gestorQ;
 
-    //Constructores
+    private ListaExpedientes listaExpedientes;
+    private ListaBitacora listaBitacora;
+
     /**
-     * Crea un gestor pacientes con los valores ingresados
+     * Constructor del gestor de pacientes.
      */
     public GestorPacientes() {
+
         colaRegular = new ColaPacientes();
         colaPreferencial = new ColaPacientes();
+
         generadorFicha = new GeneradorFicha();
+
+        contadorPreferenciales = 0;
+
         gestorQ = new GestorQuejas();
+
+        listaExpedientes = new ListaExpedientes();
+        listaBitacora = new ListaBitacora();
     }
 
-    /**
-     * Crea un gestro pacientes con los valores ingresados
-     *
-     * @param colaRegular cola de pacientes Regulares
-     * @param colaPreferencial cola de pacientes Preferenciales
-     * @param generadorFicha generador de ficha para los pacientes
-     */
-    public GestorPacientes(ColaPacientes colaRegular,
-            ColaPacientes colaPreferencial, GeneradorFicha generadorFicha) {
-        this.colaRegular = colaRegular;
-        this.colaPreferencial = colaPreferencial;
-        this.generadorFicha = generadorFicha;
-    }
-
-    //Getters
-    /**
-     * Obtiene la cola regular
-     *
-     * @return cola regular
-     */
     public ColaPacientes getColaRegular() {
         return colaRegular;
     }
 
-    /**
-     * Obtiene la cola preferencial
-     *
-     * @return cola preferencial
-     */
     public ColaPacientes getColaPreferencial() {
         return colaPreferencial;
     }
 
-    /**
-     * Obtiene el gestor de quejas asociado al gestor de pacientes
-     *
-     * @return gestorQ
-     */
+    public GeneradorFicha getGeneradorFicha() {
+        return generadorFicha;
+    }
+
     public GestorQuejas getGestorQ() {
         return gestorQ;
     }
 
-    //Metodos
-    /**
-     * Método para crear fichas
-     *
-     * @return Paciente
-     */
-    public Paciente seleccionarFicha(String cedula, String nombre, String tipoPaciente) {
+    public ListaExpedientes getListaExpedientes() {
+        return listaExpedientes;
+    }
 
-        String ficha;
-        ColaPacientes cola;
-
-        if (tipoPaciente.equals("Preferencial")) {
-            ficha = generadorFicha.generarPreferencial();
-            cola = colaPreferencial;
-
-        } else {
-            ficha = generadorFicha.generarRegular();
-            cola = colaRegular;
-
-        }
-        Paciente nuevo = new Paciente(ficha, cedula, nombre,
-                new Date(), tipoPaciente);
-
-        cola.encolarPaciente(nuevo);
-
-        return nuevo;
-
+    public ListaBitacora getListaBitacora() {
+        return listaBitacora;
     }
 
     /**
-     * Método para atender pacientes Cada 2 preferenciales se atiende uno
-     * regular
+     * Selecciona una ficha para el paciente.
      *
-     * @return Paciente
+     * @param cedula cédula del paciente
+     * @param nombre nombre del paciente
+     * @param tipoPaciente tipo Regular o Preferencial
+     * @return paciente registrado
      */
-    public Paciente atenderPaciente() {
-        Paciente paciente = null;
+    public Paciente seleccionarFicha(
+            String cedula,
+            String nombre,
+            String tipoPaciente) {
 
-        // Si existen pacientes en ambas colas
-        if (!colaPreferencial.esVacia() && !colaRegular.esVacia()) {
+        if (cedula == null
+                || cedula.trim().isEmpty()
+                || nombre == null
+                || nombre.trim().isEmpty()
+                || tipoPaciente == null
+                || tipoPaciente.trim().isEmpty()) {
 
-            if (contadorPreferenciales < 2) {
-                paciente = colaPreferencial.desencolarPaciente();
-                contadorPreferenciales++;
-            } else {
-                paciente = colaRegular.desencolarPaciente();
-                contadorPreferenciales = 0;
-            }
+            return null;
+        }
 
-        } // Solo quedan preferenciales
-        else if (!colaPreferencial.esVacia()) {
-            paciente = colaPreferencial.desencolarPaciente();
-        } // Solo quedan regulares
-        else if (!colaRegular.esVacia()) {
-            paciente = colaRegular.desencolarPaciente();
+        String ficha;
+
+        if (tipoPaciente.equalsIgnoreCase("Preferencial")) {
+
+            ficha = generadorFicha.generarPreferencial();
+
+        } else {
+
+            ficha = generadorFicha.generarRegular();
+        }
+
+        Date fechaHoraLlegada = new Date();
+
+        Paciente paciente = new Paciente(
+                ficha,
+                cedula.trim(),
+                nombre.trim(),
+                fechaHoraLlegada,
+                tipoPaciente.trim()
+        );
+
+        if (tipoPaciente.equalsIgnoreCase("Preferencial")) {
+
+            colaPreferencial.encolarPaciente(paciente);
+
+        } else {
+
+            colaRegular.encolarPaciente(paciente);
         }
 
         return paciente;
     }
 
     /**
-     * Elimina de la cola al paciente indicado por su número de ficha y registra
-     * una queja con el motivo proporcionado.
+     * Atiende al siguiente paciente.
      *
-     * Si la ficha pertenece a un paciente preferencial, se elimina de dicha
-     * cola; de lo contrario, se busca en la cola regular. Cuando el paciente es
-     * encontrado, la queja queda registrada para su revisión posterior.
+     * Se atienden dos pacientes preferenciales y luego uno regular,
+     * siempre que existan pacientes en ambas colas.
      *
-     * @param ficha Número de ficha del paciente que abandona la cola.
-     * @param motivo Motivo indicado por el paciente para abandonar la cola.
-     * @return El paciente eliminado o {@code null} si la ficha no existe.
+     * @return paciente atendido o null si no hay pacientes
      */
-    public Paciente abandonarCola(String ficha, String motivo) {
+    public Paciente atenderPaciente() {
 
         Paciente paciente = null;
 
-        // Buscar primero en la cola preferencial
-        paciente = colaPreferencial.eliminarPorFicha(ficha);
+        if (!colaPreferencial.esVacia()
+                && (contadorPreferenciales < 2
+                || colaRegular.esVacia())) {
 
-        // Si no está, buscar en la cola regular
-        if (paciente == null) {
-            paciente = colaRegular.eliminarPorFicha(ficha);
+            paciente = colaPreferencial.desencolarPaciente();
+
+            contadorPreferenciales++;
+
+        } else if (!colaRegular.esVacia()) {
+
+            paciente = colaRegular.desencolarPaciente();
+
+            contadorPreferenciales = 0;
+
+        } else if (!colaPreferencial.esVacia()) {
+
+            paciente = colaPreferencial.desencolarPaciente();
+
+            contadorPreferenciales++;
         }
 
         if (paciente != null) {
-            //Crear la queja y guardarla en la pila
-            gestorQ.registrarQueja(paciente, motivo);
 
+            Date fechaAtencion = new Date();
+
+            BitacoraCita registro = new BitacoraCita(
+                    paciente.getFicha(),
+                    paciente.getCedula(),
+                    paciente.getNombre(),
+                    paciente.getFechaHoraLlegada(),
+                    fechaAtencion
+            );
+
+            listaBitacora.insertar(registro);
         }
+
         return paciente;
     }
 
     /**
-     * Obtiene la lista de pacientes pendientes de atención.
+     * Elimina un paciente de la cola y registra una queja.
      *
-     * @return Información de las colas de pacientes.
+     * @param ficha ficha del paciente
+     * @param motivo motivo del abandono
+     * @return paciente eliminado o null
      */
-    public String mostrarPacientes() {
-        String msg = "==== COLA PREFERENCIALES ====\n\n"
-                + colaPreferencial.mostrarPaciente()
-                + "\n"
-                + "====== COLA  REGULARES ======\n\n"
-                + colaRegular.mostrarPaciente();
+    public Paciente abandonarCola(
+            String ficha,
+            String motivo) {
 
-        return msg;
+        if (ficha == null || ficha.trim().isEmpty()) {
+            return null;
+        }
+
+        Paciente paciente
+                = colaPreferencial.eliminarPorFicha(ficha.trim());
+
+        if (paciente == null) {
+
+            paciente = colaRegular.eliminarPorFicha(ficha.trim());
+        }
+
+        if (paciente != null) {
+
+            gestorQ.registrarQueja(paciente, motivo);
+        }
+
+        return paciente;
     }
 
     /**
-     * Obtiene la cantidad total de pacientes pendientes.
+     * Registra un expediente médico.
      *
-     * @return Cantidad total de pacientes.
+     * @param cedula cédula del paciente
+     * @param nombre nombre del paciente
+     * @param edad edad del paciente
+     * @param genero género del paciente
+     * @return true si fue registrado
+     */
+    public boolean registrarExpediente(
+            String cedula,
+            String nombre,
+            int edad,
+            String genero) {
+
+        if (cedula == null
+                || cedula.trim().isEmpty()
+                || nombre == null
+                || nombre.trim().isEmpty()
+                || edad < 0
+                || genero == null
+                || genero.trim().isEmpty()) {
+
+            return false;
+        }
+
+        ExpedientePaciente existente
+                = listaExpedientes.buscarExpediente(cedula.trim());
+
+        if (existente != null) {
+            return false;
+        }
+
+        ExpedientePaciente expediente
+                = new ExpedientePaciente(
+                        cedula.trim(),
+                        nombre.trim(),
+                        edad,
+                        genero.trim()
+                );
+
+        listaExpedientes.insertarExpediente(expediente);
+
+        return true;
+    }
+
+    /**
+     * Busca un expediente por cédula.
+     *
+     * @param cedula cédula del paciente
+     * @return expediente encontrado o null
+     */
+    public ExpedientePaciente buscarExpediente(String cedula) {
+
+        if (cedula == null || cedula.trim().isEmpty()) {
+            return null;
+        }
+
+        return listaExpedientes.buscarExpediente(cedula.trim());
+    }
+
+    /**
+     * Registra una cita dentro del expediente.
+     *
+     * @param cedula cédula del paciente
+     * @param doctor nombre del doctor
+     * @param diagnostico diagnóstico
+     * @return true si la cita fue registrada
+     */
+    public boolean registrarCita(
+            String cedula,
+            String doctor,
+            String diagnostico) {
+
+        if (doctor == null
+                || doctor.trim().isEmpty()
+                || diagnostico == null
+                || diagnostico.trim().isEmpty()) {
+
+            return false;
+        }
+
+        ExpedientePaciente expediente
+                = buscarExpediente(cedula);
+
+        if (expediente == null) {
+            return false;
+        }
+
+        Cita cita = new Cita(
+                new Date(),
+                doctor.trim(),
+                diagnostico.trim()
+        );
+
+        expediente.agregarCita(cita);
+
+        return true;
+    }
+
+    /**
+     * Registra un medicamento dentro del expediente.
+     *
+     * @param cedula cédula del paciente
+     * @param nombreMedicamento nombre del medicamento
+     * @return true si fue registrado
+     */
+    public boolean registrarMedicamento(
+            String cedula,
+            String nombreMedicamento) {
+
+        if (nombreMedicamento == null
+                || nombreMedicamento.trim().isEmpty()) {
+
+            return false;
+        }
+
+        ExpedientePaciente expediente
+                = buscarExpediente(cedula);
+
+        if (expediente == null) {
+            return false;
+        }
+
+        Medicamento medicamento = new Medicamento(
+                new Date(),
+                nombreMedicamento.trim()
+        );
+
+        expediente.agregarMedicamento(medicamento);
+
+        return true;
+    }
+
+    /**
+     * Muestra un expediente.
+     *
+     * @param cedula cédula del paciente
+     * @return información del expediente
+     */
+    public String mostrarExpediente(String cedula) {
+
+        ExpedientePaciente expediente
+                = buscarExpediente(cedula);
+
+        if (expediente == null) {
+
+            return "No existe un expediente con esa cédula.";
+        }
+
+        return expediente.mostrarExpediente();
+    }
+
+    /**
+     * Muestra todos los expedientes.
+     *
+     * @return expedientes registrados
+     */
+    public String mostrarTodosLosExpedientes() {
+
+        return listaExpedientes.mostrarTodosLosExpedientes();
+    }
+
+    /**
+     * Inicia la navegación por la lista de expedientes.
+     *
+     * @return primer expediente
+     */
+    public ExpedientePaciente iniciarNavegacionExpedientes() {
+
+        return listaExpedientes.iniciarNavegacion();
+    }
+
+    /**
+     * Devuelve el siguiente expediente.
+     *
+     * @return siguiente expediente
+     */
+    public ExpedientePaciente siguienteExpediente() {
+
+        return listaExpedientes.siguienteExpediente();
+    }
+
+    /**
+     * Devuelve el expediente anterior.
+     *
+     * @return expediente anterior
+     */
+    public ExpedientePaciente anteriorExpediente() {
+
+        return listaExpedientes.anteriorExpediente();
+    }
+
+    /**
+     * Muestra la bitácora de pacientes atendidos.
+     *
+     * @return información de la bitácora
+     */
+    public String mostrarBitacora() {
+
+        return listaBitacora.mostrar();
+    }
+
+    /**
+     * Cuenta los pacientes atendidos.
+     *
+     * @return cantidad de pacientes atendidos
+     */
+    public int totalAtendidos() {
+
+        return listaBitacora.contar();
+    }
+
+    /**
+     * Muestra los pacientes pendientes.
+     *
+     * @return información de las dos colas
+     */
+    public String mostrarPacientes() {
+
+        String resultado = "";
+
+        resultado += "====== COLA PREFERENCIAL ======\n";
+
+        if (colaPreferencial.esVacia()) {
+
+            resultado += "No hay pacientes preferenciales pendientes.\n";
+
+        } else {
+
+            resultado += colaPreferencial.mostrarPaciente(
+                    0,
+                    colaPreferencial.contarPacientes()
+            );
+        }
+
+        resultado += "\n====== COLA REGULAR ======\n";
+
+        if (colaRegular.esVacia()) {
+
+            resultado += "No hay pacientes regulares pendientes.\n";
+
+        } else {
+
+            resultado += colaRegular.mostrarPaciente(
+                    0,
+                    colaRegular.contarPacientes()
+            );
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Cuenta todos los pacientes pendientes.
+     *
+     * @return total de pacientes en ambas colas
      */
     public int totalPacientes() {
+
         return colaPreferencial.contarPacientes()
                 + colaRegular.contarPacientes();
     }
