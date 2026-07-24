@@ -3,75 +3,107 @@ package Menu;
 import javax.swing.JOptionPane;
 
 /**
- * Muestra el menú de principal del sistema
+ * Muestra el menú principal del sistema.
+ *
  * @author nelson
  */
 public class MenuPrincipal {
 
+    private MenuPacientes menuP;
+
+    public MenuPrincipal() {
+        menuP = new MenuPacientes();
+    }
+
     /**
-     * Muestra el menú con JOptionPane
-     * y permite elegir la función con do while y switch
+     * Muestra el menú principal.
      */
     public void mostrarMenuPrincipal() {
-        
-        MenuPacientes menuP = new MenuPacientes();
 
         int opcion;
 
         do {
 
-            opcion = Integer.parseInt(JOptionPane.showInputDialog(
-                    "=================================\n"
-                    + "BIENVENIDO A HOSPITAL 'SU SALUD'\n"
-                    + "=================================\n\n"
-                    + "1. Gestionar Llegada de Pacientes\n"
-                    + "2. Ayuda\n"
-                    + "3. Salir\n\n"
-                    + "Seleccione una opción:"
-            ));
+            try {
+
+                String entrada = JOptionPane.showInputDialog(
+                        "=================================\n"
+                        + "BIENVENIDO A HOSPITAL 'SU SALUD'\n"
+                        + "=================================\n\n"
+                        + "1. Gestionar Llegada de Pacientes\n"
+                        + "2. Ayuda\n"
+                        + "3. Salir\n\n"
+                        + "Seleccione una opción:"
+                );
+
+                if (entrada == null) {
+                    opcion = 3;
+                } else {
+                    opcion = Integer.parseInt(entrada.trim());
+                }
+
+            } catch (NumberFormatException e) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Debe ingresar una opción válida.");
+
+                opcion = 0;
+            }
 
             switch (opcion) {
 
                 case 1:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción: Gestionar Llegada de Pacientes");
                     menuP.mostrarMenu();
                     break;
 
                 case 2:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción: Ayuda");
                     mostrarAyuda();
                     break;
 
                 case 3:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción: Salir");
-                    JOptionPane.showMessageDialog(null, 
-                            "GRACIAS POR SU VISITA");
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "GRACIAS POR UTILIZAR EL SISTEMA");
                     break;
 
                 default:
-                    JOptionPane.showMessageDialog(null,
-                            "Opción inválida.");
+
+                    if (opcion != 0) {
+
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Opción inválida.");
+                    }
+
+                    break;
             }
 
         } while (opcion != 3);
+
     }
-    
+
     /**
-     * Muestra un submenu de Ayuda con la versión del sistema y los colaboradores
+     * Muestra la ayuda del sistema.
      */
     public void mostrarAyuda() {
-        JOptionPane.showMessageDialog(null,
+
+        JOptionPane.showMessageDialog(
+                null,
                 "=================================\n"
-              + "    VERSIÓN DE LA HERRAMIENTA\n"
-              + "=================================\n\n"
-              + "Avance 1 V 1.0.N (N numero de avances internos)\n"
-              + "Colaboradores: \n"
-              + "Ignacio R. Leitón Benavides \n"
-              + "Johan Rodriguez Chaves \n"
-              + "Nelsonc Latino Valverde \n"
-        );
+                + "VERSIÓN DE LA HERRAMIENTA\n"
+                + "=================================\n\n"
+                + "Hospital 'Su Salud'\n"
+                + "Avance 2 - Versión 2.0\n\n"
+                + "COLABORADORES:\n"
+                + "Ignacio R. Leitón Benavides\n"
+                + "Johan Rodríguez Chaves\n"
+                + "Nelson Latino Valverde\n\n"
+                + "FUNCIONES:\n"
+                + "- Gestión de pacientes\n"
+                + "- Expedientes médicos\n"
+                + "- Historial de citas\n"
+                + "- Historial de medicamentos\n"
+                + "- Bitácora de pacientes atendidos");
     }
 }
