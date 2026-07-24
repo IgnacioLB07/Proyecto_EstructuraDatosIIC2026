@@ -1,5 +1,6 @@
 package Estructura;
 
+import EstructurasBase.ListaEnlazadaSimple;
 import Modelo.BitacoraCita;
 
 /**
@@ -8,7 +9,7 @@ import Modelo.BitacoraCita;
  *
  * @author nelson
  */
-public class ListaBitacora {
+public class ListaBitacora{
 
     // Atributo
     private NodoBitacora primero;
@@ -30,7 +31,11 @@ public class ListaBitacora {
     }
 
     /**
-     * Compara dos cédulas.
+     * Compara las cdulas
+     * 
+     * @param cedula1 primer identificador de paciente 
+     * @param cedula2 segundo identificador de paciente
+     * @return 
      */
     private int compararCedulas(String cedula1, String cedula2) {
 

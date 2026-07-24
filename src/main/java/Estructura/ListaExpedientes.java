@@ -12,18 +12,34 @@ import Modelo.ExpedientePaciente;
  */
 public class ListaExpedientes {
 
+    // Atributos
     private NodoExpediente primero;
     private NodoExpediente actual;
 
+    // Constructor
+    /**
+     * Constructor vacio
+     */
     public ListaExpedientes() {
         primero = null;
         actual = null;
     }
 
+    /**
+     * Verifica que la lista este vacia
+     * @return true/false si esta vacia
+     */
     public boolean esVacia() {
         return primero == null;
     }
 
+    /**
+     * Compara las cedulas de los pacientes
+     * 
+     * @param cedula1 primer identificador de paciente
+     * @param cedula2 segundo identificador de paciente
+     * @return comparacion de cedulas
+     */
     private int compararCedulas(String cedula1, String cedula2) {
 
         String valor1 = cedula1.replace("-", "").trim();
@@ -42,6 +58,11 @@ public class ListaExpedientes {
         }
     }
 
+    /**
+     * Verifica que al insertar un Expediente este correcto
+     * @param expediente datos medicos del paciente
+     * @return true/false si se inserto el expediente
+     */
     public boolean insertarExpediente(ExpedientePaciente expediente) {
 
         if (expediente == null || expediente.getCedula() == null) {
@@ -105,6 +126,12 @@ public class ListaExpedientes {
         return true;
     }
 
+    /**
+     * Busca al expediente en la lista
+     * 
+     * @param cedula identificador del paciente
+     * @return los datos del expediente
+     */
     public ExpedientePaciente buscarExpediente(String cedula) {
 
         if (esVacia() || cedula == null) {
@@ -128,6 +155,10 @@ public class ListaExpedientes {
         return null;
     }
 
+    /**
+     * Inicia la navegacion de expedientes
+     * @return el expediente requerido
+     */
     public ExpedientePaciente iniciarNavegacion() {
 
         if (esVacia()) {
@@ -139,6 +170,10 @@ public class ListaExpedientes {
         return actual.getDato();
     }
 
+    /**
+     * Pasa al siguiente expediente
+     * @return el expediente requerido
+     */
     public ExpedientePaciente siguienteExpediente() {
 
         if (esVacia()) {
@@ -154,6 +189,10 @@ public class ListaExpedientes {
         return actual.getDato();
     }
 
+    /**
+     * Se devuelve al expediente anterior
+     * @return el expediente requerido
+     */
     public ExpedientePaciente anteriorExpediente() {
 
         if (esVacia()) {
@@ -169,6 +208,11 @@ public class ListaExpedientes {
         return actual.getDato();
     }
 
+    /**
+     * Devuelve el expediente en la posicion actual
+     * 
+     * @return el expediente actual
+     */
     public ExpedientePaciente getExpedienteActual() {
 
         if (actual == null) {
@@ -178,6 +222,10 @@ public class ListaExpedientes {
         return actual.getDato();
     }
 
+    /**
+     * Devuelve un string mostrando los expedientes
+     * @return mensaje
+     */
     public String mostrarTodosLosExpedientes() {
 
         if (esVacia()) {
@@ -199,6 +247,10 @@ public class ListaExpedientes {
         return mensaje;
     }
 
+    /**
+     * Cuenta los expedientes 
+     * @return cantidad de expedientes
+     */
     public int contarExpedientes() {
 
         if (esVacia()) {
@@ -218,6 +270,10 @@ public class ListaExpedientes {
         return contador;
     }
 
+    /**
+     * Devuelve el primer expediente
+     * @return primer expediente
+     */
     public NodoExpediente getPrimero() {
         return primero;
     }

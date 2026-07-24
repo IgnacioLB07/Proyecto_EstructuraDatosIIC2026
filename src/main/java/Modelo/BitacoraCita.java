@@ -22,6 +22,15 @@ public class BitacoraCita {
 
     // Constructores
 
+    /**
+     * Constructor lleno
+     * 
+     * @param ficha ficha del paciente
+     * @param cedula identificador del paciente
+     * @param nombre nombre del paciente
+     * @param fechaLlegada cuando llego algun paciente
+     * @param fechaAtencion cuando se atendio un paciente
+     */
     public BitacoraCita(String ficha,
             String cedula,
             String nombre,
@@ -35,6 +44,9 @@ public class BitacoraCita {
         this.fechaAtencion = fechaAtencion;
     }
 
+    /**
+     * Constructor vacio
+     */
     public BitacoraCita() {
     }
 
