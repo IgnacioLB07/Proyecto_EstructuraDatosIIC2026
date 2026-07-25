@@ -371,6 +371,10 @@ public class GestorPacientes {
 
         return listaExpedientes.mostrarTodosLosExpedientes();
     }
+    
+    public String mostrarTodosLosExpedientes(int inicio, int cantidad) {
+        return listaExpedientes.mostrarTodosLosExpedientes(inicio, cantidad);
+    }
 
     /**
      * Inicia la navegación por la lista de expedientes.
@@ -412,6 +416,17 @@ public class GestorPacientes {
         return listaBitacora.mostrar();
     }
 
+    /**
+     * Muestra la bitácora con una cantidad determinada de registros
+     * 
+     * @param inicio posicion inicial
+     * @param cantidad cantidad maxima de registros
+     * @return informacion de la bitacora
+     */
+    public String mostrarBitacora(int inicio, int cantidad) {
+        return listaBitacora.mostrar(inicio, cantidad);
+    }
+    
     /**
      * Cuenta los pacientes atendidos.
      *
@@ -471,5 +486,9 @@ public class GestorPacientes {
 
         return colaPreferencial.contarPacientes()
                 + colaRegular.contarPacientes();
+    }
+    
+    public int contarExpedientes() {
+        return listaExpedientes.contarExpedientes();
     }
 }

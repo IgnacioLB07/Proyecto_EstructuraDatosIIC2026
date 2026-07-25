@@ -1,6 +1,5 @@
 package Estructura;
 
-import EstructurasBase.ListaEnlazadaSimple;
 import Modelo.BitacoraCita;
 
 /**
@@ -178,6 +177,42 @@ public class ListaBitacora{
 
     }
 
+    /**
+     * Muestra una cantidad especifca de registros de bitacora
+     * a partir de una posicion determinada
+     * 
+     * @param inicio posicion inicial
+     * @param cantidad cantidad maxima de registros a mostrar
+     * @return informacion de los registros solicitados
+     */
+    public String mostrar(int inicio, int cantidad) {
+        if (esVacia()) {
+            return "No existen registros en la bitácora";
+        }
+        
+        String mensaje = "";
+        NodoBitacora actual = primero;
+        
+        int indice = 0;
+        int mostrados = 0;
+        
+        while (actual != null && mostrados < cantidad) {            
+            
+            if (indice >= inicio) {
+                mensaje += "=================================\n";
+                mensaje += actual.getDato().toString();
+                mensaje += "\n\n";
+                
+                mostrados++;
+            }
+            
+            indice ++;
+            actual = actual.getSiguiente();
+        }
+        return mensaje;
+        
+    }
+    
     /**
      * Devuelve el primer nodo.
      *

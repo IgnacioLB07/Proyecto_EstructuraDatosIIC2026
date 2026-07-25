@@ -271,6 +271,44 @@ public class ListaExpedientes {
     }
 
     /**
+     * Muestra una cantidad determinada de expedientes a partir de una posicion
+     * especifica en la lista circular
+     * @param inicio posicion inicial del recorrido
+     * @param cantidad cantidad maxima de expedientes a mostrar
+     * @return informacion de los expedientes solicitados
+     */
+    public String mostrarTodosLosExpedientes(int inicio, int cantidad) {
+        
+        if (esVacia()) {
+            return "No existen expedientes registrados.";
+        }
+        
+        
+        String mensaje = "";
+        NodoExpediente recorrido = primero;
+        
+        int indice = 0;
+        int mostrados = 0;
+        
+        do {            
+            
+            if (indice >= inicio && mostrados < cantidad) {
+                
+                mensaje += recorrido.getDato().mostrarExpediente();
+                mensaje += "\n\n";
+                
+                mostrados++;
+            }
+            
+            indice++;
+            recorrido = recorrido.getSiguiente();
+            
+        } while (recorrido != primero && mostrados < cantidad);
+        
+        return mensaje;
+    }
+    
+    /**
      * Devuelve el primer expediente
      * @return primer expediente
      */

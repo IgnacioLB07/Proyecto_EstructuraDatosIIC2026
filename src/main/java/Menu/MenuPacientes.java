@@ -633,9 +633,32 @@ public class MenuPacientes {
      */
     private void mostrarTodosLosExpedientes() {
 
-        JOptionPane.showMessageDialog(
-                null,
-                gestorP.mostrarTodosLosExpedientes());
+        int total = gestorP.contarExpedientes();
+        
+        if (total == 0) {
+            JOptionPane.showMessageDialog(null, "No existen expedientes registrados.");
+            return;
+        }
+        
+        int inicio = 0;
+        
+        while (inicio < total) {            
+            
+            int fin = Math.min(inicio + 1, total);
+            
+            JOptionPane.showMessageDialog(
+                    null,
+                    "====================================\n"
+                    + "EXPEDIENTE MÉDICO\n"
+                    + "====================================\n\n"
+                    + "Mostrando registros " + (inicio + 1)
+                    + " - " + fin
+                    + " de " + total + "\n"
+                    + gestorP.mostrarTodosLosExpedientes(inicio, 1)
+            );
+            
+            inicio += 1;
+        }
     }
     /**
      * Permite navegar entre los expedientes registrados.
@@ -705,15 +728,33 @@ public class MenuPacientes {
      */
     private void mostrarBitacora() {
 
-        JOptionPane.showMessageDialog(
-                null,
-                "====================================\n"
-                + "BITÁCORA DE CITAS DEL DÍA\n"
-                + "====================================\n\n"
-                + gestorP.mostrarBitacora()
-                + "\n\nTotal de pacientes atendidos: "
-                + gestorP.totalAtendidos()
-        );
+        int total = gestorP.totalAtendidos();
+        
+        if (total == 0) {
+            JOptionPane.showMessageDialog(null, "No existen pacientes registrados en la bitácora.");
+            return;
+        }
+        
+        int inicio = 0;
+        
+        while (inicio < total) {            
+            
+            int fin = Math.min(inicio + 2, total);
+            
+            JOptionPane.showMessageDialog(
+                    null,
+                    "====================================\n"
+                    + "BITÁCORA DE CITAS DEL DÍA\n"
+                    + "====================================\n\n"
+                    + gestorP.mostrarBitacora(inicio, 2)
+                    + "\n\n Mostrando registros " + (inicio + 1)
+                    + " - " + fin
+                    + " de " + total
+            );
+            
+            inicio += 2;
+        }
+        
     }
 
 }
