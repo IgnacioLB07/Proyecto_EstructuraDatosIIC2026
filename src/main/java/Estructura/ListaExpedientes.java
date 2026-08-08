@@ -1,5 +1,6 @@
 package Estructura;
 
+import EstructurasBase.ListaDobleCircular;
 import Modelo.ExpedientePaciente;
 
 /**
@@ -8,9 +9,11 @@ import Modelo.ExpedientePaciente;
  * Los expedientes se insertan ordenados de menor a mayor según la cédula.
  * La estructura permite recorrer los expedientes hacia adelante y hacia atrás.
  *
+ * Hereda de ListaDobleCircular
+ * 
  * @author nelson
  */
-public class ListaExpedientes {
+public class ListaExpedientes extends ListaDobleCircular {
 
     // Atributos
     private NodoExpediente primero;
@@ -312,7 +315,4 @@ public class ListaExpedientes {
      * Devuelve el primer expediente
      * @return primer expediente
      */
-    public NodoExpediente getPrimero() {
-        return primero;
-    }
 }

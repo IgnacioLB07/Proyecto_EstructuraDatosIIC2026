@@ -1,14 +1,17 @@
 package Estructura;
 
+import EstructurasBase.ListaCircular;
 import Modelo.Medicamento;
 
 /**
  * Lista Simple Circular para almacenar
  * el histórico de medicamentos prescritos.
+ * 
+ * Hereda de ListaCircular
  *
  * @author nelson
  */
-public class ListaCircularMedicamentos {
+public class ListaCircularMedicamentos extends ListaCircular {
 
     // Atributos
     private NodoMedicamento ultimo;

@@ -1,5 +1,6 @@
 package Estructura;
 
+import EstructurasBase.ListaCircular;
 import Modelo.Cita;
 
 /**
@@ -7,7 +8,7 @@ import Modelo.Cita;
  *
  * @author nelson
  */
-public class ListaCircularCitas {
+public class ListaCircularCitas extends ListaCircular {
 
     // Atributos
     private NodoCita ultimo;

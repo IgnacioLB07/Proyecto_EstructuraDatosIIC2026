@@ -1,14 +1,17 @@
 package Estructura;
 
+import EstructurasBase.ListaEnlazadaSimple;
 import Modelo.BitacoraCita;
 
 /**
  * Lista Simple Ordenada por cédula para almacenar
  * la bitácora de citas del día.
  *
+ * Hereda de ListaEnlazadaSimple
+ * 
  * @author nelson
  */
-public class ListaBitacora{
+public class ListaBitacora extends ListaEnlazadaSimple{
 
     // Atributo
     private NodoBitacora primero;
