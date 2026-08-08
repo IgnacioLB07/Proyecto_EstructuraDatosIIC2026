@@ -168,6 +168,79 @@ public class ColaPacientes {
         return mostrarPaciente(0, cantidad);
     }
 
+    public int contarCoincidencias(
+        Integer edadInicial,
+        Integer edadFinal,
+        String diagnostico,
+        String genero,
+        String medicamento) {
+
+    int cantidadEncontrados = 0;
+
+    NodoPaciente actual = frente;
+
+    while (actual != null) {
+
+        Paciente paciente = actual.getDato();
+
+        boolean coincide = true;
+
+        // Filtro por edad
+        if (edadInicial != null && edadFinal != null) {
+
+            if (paciente.getEdad() < edadInicial
+                    || paciente.getEdad() > edadFinal) {
+
+                coincide = false;
+            }
+        }
+
+        // Filtro por diagnóstico
+        if (diagnostico != null
+                && !diagnostico.trim().isEmpty()) {
+
+            if (paciente.getDiagnostico() == null
+                    || !paciente.getDiagnostico()
+                            .equalsIgnoreCase(diagnostico.trim())) {
+
+                coincide = false;
+            }
+        }
+
+        // Filtro por género
+        if (genero != null
+                && !genero.trim().isEmpty()) {
+
+            if (paciente.getGenero() == null
+                    || !paciente.getGenero()
+                            .equalsIgnoreCase(genero.trim())) {
+
+                coincide = false;
+            }
+        }
+
+        // Filtro por medicamento
+        if (medicamento != null
+                && !medicamento.trim().isEmpty()) {
+
+            if (paciente.getMedicamento() == null
+                    || !paciente.getMedicamento()
+                            .equalsIgnoreCase(medicamento.trim())) {
+
+                coincide = false;
+            }
+        }
+
+        if (coincide) {
+            cantidadEncontrados++;
+        }
+
+        actual = actual.getSiguiente();
+    }
+
+    return cantidadEncontrados;
+}
+    
     /**
      * Muestra pacientes utilizando paginación.
      *
