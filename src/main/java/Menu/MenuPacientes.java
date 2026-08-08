@@ -1,4 +1,5 @@
 package Menu;
+
 import Modelo.ExpedientePaciente;
 import Estructura.ColaPacientes;
 import Modelo.Paciente;
@@ -42,9 +43,8 @@ public class MenuPacientes {
                         + "3. Abandonar Cola\n"
                         + "4. Mostrar Pacientes Pendientes\n"
                         + "5. Mostrar Quejas\n"
-                        + "6. Gestión de Expedientes\n"
-                        + "7. Mostrar Bitácora del Día\n"
-                        + "8. Regresar\n\n"
+                        + "6. Mostrar Bitácora del Día\n"
+                        + "7. Regresar\n\n"
                         + "Seleccione una opción:"
                 ));
 
@@ -75,14 +75,10 @@ public class MenuPacientes {
                     break;
 
                 case 6:
-                    mostrarMenuExpedientes();
-                    break;
-
-                case 7:
                     mostrarBitacora();
                     break;
 
-                case 8:
+                case 7:
                     JOptionPane.showMessageDialog(
                             null,
                             "Regresando al menú principal...");
@@ -94,7 +90,7 @@ public class MenuPacientes {
                             "Opción inválida.");
             }
 
-        } while (opcion != 8);
+        } while (opcion != 7);
 
     }
 
@@ -177,8 +173,10 @@ public class MenuPacientes {
                 "Paciente atendido correctamente.\n\n"
                 + "Ficha: " + paciente.getFicha()
                 + "\nCédula: " + paciente.getCedula()
-                + "\nNombre: " + paciente.getNombre());
+                + "\nNombre: " + paciente.getNombre()
+                + "\n\n Pasar a Consulta Médica");
 
+        menuConsulta(paciente);
     }
 
     /**
@@ -200,8 +198,8 @@ public class MenuPacientes {
             return;
         }
 
-        Paciente paciente =
-                gestorP.abandonarCola(ficha, motivo);
+        Paciente paciente
+                = gestorP.abandonarCola(ficha, motivo);
 
         if (paciente == null) {
 
@@ -285,8 +283,8 @@ public class MenuPacientes {
      */
     private void mostrarQuejas() {
 
-        int total =
-                gestorP.getGestorQ().contarQuejas();
+        int total
+                = gestorP.getGestorQ().contarQuejas();
 
         int inicio = 0;
 
@@ -312,8 +310,83 @@ public class MenuPacientes {
         }
 
     }
+
     /**
      * Menú para gestionar los expedientes médicos.
+     */
+    private void menuConsulta(Paciente paciente) {
+        int opcion;
+
+        do {
+            String menu
+                    = "====================================\n"
+                    + "          CONSULTA MÉDICA\n"
+                    + "====================================\n\n"
+                    + "Paciente atendido:\n"
+                    + "Ficha: " + paciente.getFicha() + "\n"
+                    + "Cédula: " + paciente.getCedula() + "\n"
+                    + "Nombre: " + paciente.getNombre() + "\n\n"
+                    + "------------------------------------\n"
+                    + "1. Registrar Expediente\n"
+                    + "2. Buscar Expediente\n"
+                    + "3. Registrar Cita\n"
+                    + "4. Registrar Medicamento\n"
+                    + "5. Mostrar Todos los Expediente\n"
+                    + "6. Navegar Expedientes\n"
+                    + "7. Finalizar Consulta\n"
+                    + "------------------------------------\n";
+
+            try {
+                opcion = Integer.parseInt(
+                        JOptionPane.showInputDialog(
+                                null,
+                                menu,
+                                "Consulta Médica",
+                                JOptionPane.QUESTION_MESSAGE));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar una opción válida.");
+                opcion = 0;
+            }
+            switch (opcion) {
+                case 1:
+                    registrarExpediente(paciente);
+                    break;
+
+                case 2:
+                    buscarExpediente();
+                    break;
+
+                case 3:
+                    registrarCita(paciente);
+                    break;
+
+                case 4:
+                    registrarMedicamento(paciente);
+                    break;
+
+                case 5:
+                    mostrarTodosLosExpedientes();
+                    break;
+
+                case 6:
+                    navegarExpedientes();
+                    break;
+
+                case 7:
+                    JOptionPane.showMessageDialog(null, "Consulta médica finalizada.");
+                    break;
+
+                default:
+                    if (opcion != 0) {
+                        JOptionPane.showMessageDialog(null, "Opción inválida.");
+                    }
+            }
+        } while (opcion != 7);
+    }
+
+    /**
+     * Posiblemente se deba eliminar, reemplazada por menuConsulta(Paciente
+     * paciente)
      */
     private void mostrarMenuExpedientes() {
 
@@ -383,17 +456,55 @@ public class MenuPacientes {
     /**
      * Registrar un expediente médico.
      */
+    private void registrarExpediente(Paciente paciente) {
+        int edad;
+
+        try {
+            edad = Integer.parseInt(JOptionPane.showInputDialog(
+                    "Paciente: " + paciente.getNombre()
+                    + "\nCédula: " + paciente.getCedula()
+                    + "\n\n Ingrese la edad: "));
+
+            if (edad <= 0) {
+                return;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Edad inválida");
+            return;
+        }
+
+        String genero = JOptionPane.showInputDialog(
+                "Paciente: " + paciente.getNombre()
+                + "\nCédula: " + paciente.getCedula()
+                + "\n\n Ingrese el género: ");
+
+        if (genero == null) {
+            return;
+        }
+
+        boolean registrado = gestorP.registrarExpediente(paciente, edad, genero);
+        if (registrado) {
+            JOptionPane.showMessageDialog(null, "Expediente registrado correctamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "Ya existe un expediente con esa cédula");
+        }
+
+    }
+
+    /**
+     * Posiblemente se deba eliminar, reemplazada po
+     * registrarExpediente(Paciente paciente)
+     */
     private void registrarExpediente() {
 
-        String cedula = JOptionPane.showInputDialog(
-                "Ingrese la cédula:");
+        String cedula = JOptionPane.showInputDialog("Ingrese la cédula:");
 
         if (cedula == null) {
             return;
         }
 
-        String nombre = JOptionPane.showInputDialog(
-                "Ingrese el nombre:");
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre:");
 
         if (nombre == null) {
             return;
@@ -402,48 +513,35 @@ public class MenuPacientes {
         int edad;
 
         try {
-
-            edad = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                            "Ingrese la edad:"));
-
+            edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la edad:"));
         } catch (Exception e) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Edad inválida.");
-
+            JOptionPane.showMessageDialog(null, "Edad inválida.");
             return;
         }
 
-        String genero = JOptionPane.showInputDialog(
-                "Ingrese el género:");
-
+        String genero = JOptionPane.showInputDialog("Ingrese el género:");
         if (genero == null) {
             return;
         }
 
-        boolean registrado =
-                gestorP.registrarExpediente(
+        boolean registrado
+                = gestorP.registrarExpediente(
                         cedula,
                         nombre,
                         edad,
                         genero);
 
         if (registrado) {
-
-            JOptionPane.showMessageDialog(
-                    null,
+            JOptionPane.showMessageDialog(null,
                     "Expediente registrado correctamente.");
 
         } else {
-
-            JOptionPane.showMessageDialog(
-                    null,
+            JOptionPane.showMessageDialog(null,
                     "Ya existe un expediente con esa cédula.");
         }
 
     }
+
     /**
      * Busca un expediente por número de cédula.
      */
@@ -457,174 +555,178 @@ public class MenuPacientes {
         }
 
         cedula = cedula.trim();
-
         if (cedula.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Debe ingresar una cédula.");
-
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cédula.");
             return;
         }
 
-        JOptionPane.showMessageDialog(
-                null,
-                gestorP.mostrarExpediente(cedula));
+        JOptionPane.showMessageDialog(null, gestorP.mostrarExpediente(cedula));
     }
 
     /**
      * Registra una cita en el expediente del paciente.
      */
-    private void registrarCita() {
-
-        String cedula = JOptionPane.showInputDialog(
-                "Ingrese la cédula del paciente:");
-
-        if (cedula == null) {
-            return;
-        }
-
-        cedula = cedula.trim();
-
-        if (cedula.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Debe ingresar una cédula.");
-
-            return;
-        }
-
-        if (gestorP.buscarExpediente(cedula) == null) {
-
-            JOptionPane.showMessageDialog(
-                    null,
+    private void registrarCita(Paciente paciente) {
+        if (gestorP.buscarExpediente(paciente.getCedula()) == null) {
+            JOptionPane.showMessageDialog(null,
                     "No existe un expediente con esa cédula.");
-
             return;
         }
 
         String doctor = JOptionPane.showInputDialog(
-                "Ingrese el nombre del doctor:");
-
+                "Paciente: "+ paciente.getNombre()
+               + "\nCédula: "+ paciente.getCedula()
+               + "\n\nIngrese el nombre del doctor:");
         if (doctor == null) {
             return;
         }
 
         doctor = doctor.trim();
-
         if (doctor.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
+            JOptionPane.showMessageDialog(null,
                     "Debe ingresar el nombre del doctor.");
-
             return;
         }
 
         String diagnostico = JOptionPane.showInputDialog(
-                "Ingrese el diagnóstico:");
-
+                "Paciente: "+ paciente.getNombre()
+               + "\nCédula: "+ paciente.getCedula()
+               + "\n\nIngrese el diagnostico:");
         if (diagnostico == null) {
             return;
         }
 
         diagnostico = diagnostico.trim();
-
         if (diagnostico.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Debe ingresar un diagnóstico.");
-
+            JOptionPane.showMessageDialog(null, "Debe ingresar un diagnóstico.");
             return;
         }
 
-        boolean registrado =
-                gestorP.registrarCita(
-                        cedula,
-                        doctor,
-                        diagnostico);
-
+        boolean registrado = gestorP.registrarCita(paciente, doctor, diagnostico);
         if (registrado) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Cita registrada correctamente.");
-
+            JOptionPane.showMessageDialog(null, "Cita registrada correctamente.");
         } else {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "No fue posible registrar la cita.");
+            JOptionPane.showMessageDialog(null, "No fue posible registrar la cita.");
         }
     }
+
     /**
-     * Registra un medicamento en el expediente del paciente.
+     * Tal vez se elimina, reemplaza registrarCita(paciente)
      */
-    private void registrarMedicamento() {
-
-        String cedula = JOptionPane.showInputDialog(
-                "Ingrese la cédula del paciente:");
-
+    private void registrarCita() {
+        String cedula = JOptionPane.showInputDialog("Ingrese la cédula del paciente:");
         if (cedula == null) {
             return;
         }
 
         cedula = cedula.trim();
-
         if (cedula.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Debe ingresar una cédula.");
-
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cédula.");
             return;
         }
 
         if (gestorP.buscarExpediente(cedula) == null) {
-
-            JOptionPane.showMessageDialog(
-                    null,
+            JOptionPane.showMessageDialog(null,
                     "No existe un expediente con esa cédula.");
-
             return;
         }
 
-        String medicamento = JOptionPane.showInputDialog(
-                "Ingrese el nombre del medicamento:");
+        String doctor = JOptionPane.showInputDialog("Ingrese el nombre del doctor:");
+        if (doctor == null) {
+            return;
+        }
 
+        doctor = doctor.trim();
+        if (doctor.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Debe ingresar el nombre del doctor.");
+            return;
+        }
+
+        String diagnostico = JOptionPane.showInputDialog("Ingrese el diagnóstico:");
+        if (diagnostico == null) {
+            return;
+        }
+
+        diagnostico = diagnostico.trim();
+        if (diagnostico.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un diagnóstico.");
+            return;
+        }
+
+        boolean registrado = gestorP.registrarCita(cedula, doctor, diagnostico);
+        if (registrado) {
+            JOptionPane.showMessageDialog(null, "Cita registrada correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No fue posible registrar la cita.");
+        }
+    }
+
+    /**
+     * Registra un medicamento en el expediente del paciente.
+     */
+    private void registrarMedicamento(Paciente paciente) {
+        if (gestorP.buscarExpediente(paciente.getCedula()) == null) {
+            JOptionPane.showMessageDialog(null,
+                    "No existe un expediente con esa cédula.");
+            return;
+        }
+        
+        String medicamento = JOptionPane.showInputDialog("Ingrese el nombre del medicamento:");
         if (medicamento == null) {
             return;
         }
 
         medicamento = medicamento.trim();
-
         if (medicamento.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Debe ingresar el nombre del medicamento.");
-
+            JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del medicamento.");
             return;
         }
 
-        boolean registrado =
-                gestorP.registrarMedicamento(
-                        cedula,
-                        medicamento);
-
+        boolean registrado = gestorP.registrarMedicamento(paciente.getCedula(), medicamento);
         if (registrado) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Medicamento registrado correctamente.");
-
+            JOptionPane.showMessageDialog(null, "Medicamento registrado correctamente.");
         } else {
+            JOptionPane.showMessageDialog(null, "No fue posible registrar el medicamento.");
+        }
+    }
+    
+    /**
+     * Posible se elimina, reemplaza registrarMedicamento(paciente)
+     */
+    private void registrarMedicamento() {
+        String cedula = JOptionPane.showInputDialog("Ingrese la cédula del paciente:");
+        if (cedula == null) {
+            return;
+        }
+        
+        cedula = cedula.trim();
+        if (cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cédula.");
+            return;
+        }
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "No fue posible registrar el medicamento.");
+        if (gestorP.buscarExpediente(cedula) == null) {
+            JOptionPane.showMessageDialog(null, "No existe un expediente con esa cédula.");
+            return;
+        }
+
+        String medicamento = JOptionPane.showInputDialog("Ingrese el nombre del medicamento:");
+        if (medicamento == null) {
+            return;
+        }
+
+        medicamento = medicamento.trim();
+        if (medicamento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del medicamento.");
+            return;
+        }
+
+        boolean registrado = gestorP.registrarMedicamento(cedula, medicamento);
+        if (registrado) {
+            JOptionPane.showMessageDialog(null, "Medicamento registrado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No fue posible registrar el medicamento.");
         }
     }
 
@@ -632,20 +734,17 @@ public class MenuPacientes {
      * Muestra todos los expedientes registrados.
      */
     private void mostrarTodosLosExpedientes() {
-
         int total = gestorP.contarExpedientes();
-        
+
         if (total == 0) {
             JOptionPane.showMessageDialog(null, "No existen expedientes registrados.");
             return;
         }
-        
+
         int inicio = 0;
-        
-        while (inicio < total) {            
-            
+        while (inicio < total) {
             int fin = Math.min(inicio + 1, total);
-            
+
             JOptionPane.showMessageDialog(
                     null,
                     "====================================\n"
@@ -656,17 +755,18 @@ public class MenuPacientes {
                     + " de " + total + "\n"
                     + gestorP.mostrarTodosLosExpedientes(inicio, 1)
             );
-            
+
             inicio += 1;
         }
     }
+
     /**
      * Permite navegar entre los expedientes registrados.
      */
     private void navegarExpedientes() {
 
-        ExpedientePaciente expediente =
-                gestorP.iniciarNavegacionExpedientes();
+        ExpedientePaciente expediente
+                = gestorP.iniciarNavegacionExpedientes();
 
         if (expediente == null) {
 
@@ -729,18 +829,18 @@ public class MenuPacientes {
     private void mostrarBitacora() {
 
         int total = gestorP.totalAtendidos();
-        
+
         if (total == 0) {
             JOptionPane.showMessageDialog(null, "No existen pacientes registrados en la bitácora.");
             return;
         }
-        
+
         int inicio = 0;
-        
-        while (inicio < total) {            
-            
+
+        while (inicio < total) {
+
             int fin = Math.min(inicio + 2, total);
-            
+
             JOptionPane.showMessageDialog(
                     null,
                     "====================================\n"
@@ -751,10 +851,10 @@ public class MenuPacientes {
                     + " - " + fin
                     + " de " + total
             );
-            
+
             inicio += 2;
         }
-        
+
     }
 
 }

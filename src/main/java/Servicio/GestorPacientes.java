@@ -130,8 +130,8 @@ public class GestorPacientes {
     /**
      * Atiende al siguiente paciente.
      *
-     * Se atienden dos pacientes preferenciales y luego uno regular,
-     * siempre que existan pacientes en ambas colas.
+     * Se atienden dos pacientes preferenciales y luego uno regular, siempre que
+     * existan pacientes en ambas colas.
      *
      * @return paciente atendido o null si no hay pacientes
      */
@@ -212,17 +212,37 @@ public class GestorPacientes {
     /**
      * Registra un expediente médico.
      *
-     * @param cedula cédula del paciente
-     * @param nombre nombre del paciente
+     * @param paciente cédula del paciente
      * @param edad edad del paciente
      * @param genero género del paciente
      * @return true si fue registrado
      */
-    public boolean registrarExpediente(
-            String cedula,
-            String nombre,
-            int edad,
-            String genero) {
+    public boolean registrarExpediente(Paciente paciente, int edad, String genero) {
+        if (paciente == null || paciente.getCedula() == null
+                || paciente.getCedula().trim().isEmpty() || paciente.getNombre() == null
+                || paciente.getNombre().trim().isEmpty() || edad < 0
+                || genero == null || genero.trim().isEmpty()) {
+
+            return false;
+        }
+
+        ExpedientePaciente existente = listaExpedientes.buscarExpediente(paciente.getCedula().trim());
+        if (existente != null) {
+            return false;
+        }
+
+        ExpedientePaciente expediente = new ExpedientePaciente(
+                paciente.getCedula().trim(), paciente.getNombre().trim(),
+                edad, genero.trim());
+        listaExpedientes.insertarExpediente(expediente);
+        return true;
+    }
+
+    /**
+     * Tal vez se borre, remplaza registrarExpediente(paciente, ...)
+     */
+    public boolean registrarExpediente(String cedula, String nombre,
+            int edad, String genero) {
 
         if (cedula == null
                 || cedula.trim().isEmpty()
@@ -273,39 +293,43 @@ public class GestorPacientes {
     /**
      * Registra una cita dentro del expediente.
      *
-     * @param cedula cédula del paciente
+     * @param paciente cédula del paciente
      * @param doctor nombre del doctor
      * @param diagnostico diagnóstico
      * @return true si la cita fue registrada
      */
-    public boolean registrarCita(
-            String cedula,
-            String doctor,
-            String diagnostico) {
-
-        if (doctor == null
-                || doctor.trim().isEmpty()
-                || diagnostico == null
-                || diagnostico.trim().isEmpty()) {
-
+    public boolean registrarCita(Paciente paciente, String doctor, String diagnostico) {
+        if (paciente == null || doctor == null || doctor.trim().isEmpty()
+            || diagnostico == null || diagnostico.trim().isEmpty()) {
             return false;
         }
 
-        ExpedientePaciente expediente
-                = buscarExpediente(cedula);
-
+        ExpedientePaciente expediente = buscarExpediente(paciente.getCedula());
         if (expediente == null) {
             return false;
         }
 
-        Cita cita = new Cita(
-                new Date(),
-                doctor.trim(),
-                diagnostico.trim()
-        );
-
+        Cita cita = new Cita(new Date(), doctor.trim(), diagnostico.trim());
         expediente.agregarCita(cita);
+        return true;
+    }
 
+    /**
+     * Posible se elimina, reemplaza registrarCita(paciente, ...)
+     */
+    public boolean registrarCita(String cedula, String doctor, String diagnostico) {
+        if (doctor == null || doctor.trim().isEmpty()
+                || diagnostico == null || diagnostico.trim().isEmpty()) {
+            return false;
+        }
+
+        ExpedientePaciente expediente = buscarExpediente(cedula);
+        if (expediente == null) {
+            return false;
+        }
+
+        Cita cita = new Cita(new Date(), doctor.trim(), diagnostico.trim());
+        expediente.agregarCita(cita);
         return true;
     }
 
@@ -316,30 +340,38 @@ public class GestorPacientes {
      * @param nombreMedicamento nombre del medicamento
      * @return true si fue registrado
      */
-    public boolean registrarMedicamento(
-            String cedula,
-            String nombreMedicamento) {
-
-        if (nombreMedicamento == null
-                || nombreMedicamento.trim().isEmpty()) {
-
+    public boolean registrarMedicamento(Paciente paciente, String nombreMedicamento) {
+        if (paciente == null || nombreMedicamento == null
+            || nombreMedicamento.trim().isEmpty()) {
             return false;
         }
 
-        ExpedientePaciente expediente
-                = buscarExpediente(cedula);
-
+        ExpedientePaciente expediente = buscarExpediente(paciente.getCedula());
         if (expediente == null) {
             return false;
         }
 
-        Medicamento medicamento = new Medicamento(
-                new Date(),
-                nombreMedicamento.trim()
-        );
-
+        Medicamento medicamento = new Medicamento(new Date(), nombreMedicamento.trim());
         expediente.agregarMedicamento(medicamento);
+        return true;
+    }
+    
+    /**
+     * Posible se elimine, reemplaza registrarMedicamento(paciente, ...)
+     */
+    public boolean registrarMedicamento(String cedula, String nombreMedicamento) {
+        if (nombreMedicamento == null
+            || nombreMedicamento.trim().isEmpty()) {
+            return false;
+        }
 
+        ExpedientePaciente expediente = buscarExpediente(cedula);
+        if (expediente == null) {
+            return false;
+        }
+
+        Medicamento medicamento = new Medicamento(new Date(), nombreMedicamento.trim());
+        expediente.agregarMedicamento(medicamento);
         return true;
     }
 
@@ -371,7 +403,7 @@ public class GestorPacientes {
 
         return listaExpedientes.mostrarTodosLosExpedientes();
     }
-    
+
     public String mostrarTodosLosExpedientes(int inicio, int cantidad) {
         return listaExpedientes.mostrarTodosLosExpedientes(inicio, cantidad);
     }
@@ -418,7 +450,7 @@ public class GestorPacientes {
 
     /**
      * Muestra la bitácora con una cantidad determinada de registros
-     * 
+     *
      * @param inicio posicion inicial
      * @param cantidad cantidad maxima de registros
      * @return informacion de la bitacora
@@ -426,7 +458,7 @@ public class GestorPacientes {
     public String mostrarBitacora(int inicio, int cantidad) {
         return listaBitacora.mostrar(inicio, cantidad);
     }
-    
+
     /**
      * Cuenta los pacientes atendidos.
      *
@@ -487,7 +519,7 @@ public class GestorPacientes {
         return colaPreferencial.contarPacientes()
                 + colaRegular.contarPacientes();
     }
-    
+
     public int contarExpedientes() {
         return listaExpedientes.contarExpedientes();
     }

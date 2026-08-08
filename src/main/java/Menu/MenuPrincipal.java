@@ -94,7 +94,7 @@ public class MenuPrincipal {
                 + "VERSIÓN DE LA HERRAMIENTA\n"
                 + "=================================\n\n"
                 + "Hospital 'Su Salud'\n"
-                + "Avance 2 - Versión 2.0\n\n"
+                + "Avance 3 - Versión 3.0\n\n"
                 + "COLABORADORES:\n"
                 + "Ignacio R. Leitón Benavides\n"
                 + "Johan Rodríguez Chaves\n"

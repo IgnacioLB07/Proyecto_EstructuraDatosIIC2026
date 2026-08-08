@@ -49,14 +49,11 @@ public class ListaExpedientes extends ListaDobleCircular {
         String valor2 = cedula2.replace("-", "").trim();
 
         try {
-
             long numero1 = Long.parseLong(valor1);
             long numero2 = Long.parseLong(valor2);
 
             return Long.compare(numero1, numero2);
-
         } catch (NumberFormatException e) {
-
             return valor1.compareToIgnoreCase(valor2);
         }
     }
@@ -79,12 +76,9 @@ public class ListaExpedientes extends ListaDobleCircular {
         NodoExpediente nuevo = new NodoExpediente(expediente);
 
         if (esVacia()) {
-
             primero = nuevo;
-
             nuevo.setSiguiente(nuevo);
             nuevo.setAnterior(nuevo);
-
             actual = primero;
 
             return true;
@@ -92,9 +86,8 @@ public class ListaExpedientes extends ListaDobleCircular {
 
         NodoExpediente ultimo = primero.getAnterior();
 
-        if (compararCedulas(
-                expediente.getCedula(),
-                primero.getDato().getCedula()) < 0) {
+        if (compararCedulas(expediente.getCedula(),
+                            primero.getDato().getCedula()) < 0) {
 
             nuevo.setSiguiente(primero);
             nuevo.setAnterior(ultimo);
@@ -109,17 +102,12 @@ public class ListaExpedientes extends ListaDobleCircular {
         }
 
         NodoExpediente recorrido = primero.getSiguiente();
-
-        while (recorrido != primero
-                && compararCedulas(
-                        expediente.getCedula(),
-                        recorrido.getDato().getCedula()) > 0) {
-
+        while (recorrido != primero && compararCedulas(expediente.getCedula(),
+                                                       recorrido.getDato().getCedula()) > 0) {
             recorrido = recorrido.getSiguiente();
         }
 
         NodoExpediente anterior = recorrido.getAnterior();
-
         nuevo.setSiguiente(recorrido);
         nuevo.setAnterior(anterior);
 
