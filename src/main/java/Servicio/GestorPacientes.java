@@ -239,50 +239,12 @@ public class GestorPacientes {
     }
 
     /**
-     * Tal vez se borre, remplaza registrarExpediente(paciente, ...)
-     */
-    public boolean registrarExpediente(String cedula, String nombre,
-            int edad, String genero) {
-
-        if (cedula == null
-                || cedula.trim().isEmpty()
-                || nombre == null
-                || nombre.trim().isEmpty()
-                || edad < 0
-                || genero == null
-                || genero.trim().isEmpty()) {
-
-            return false;
-        }
-
-        ExpedientePaciente existente
-                = listaExpedientes.buscarExpediente(cedula.trim());
-
-        if (existente != null) {
-            return false;
-        }
-
-        ExpedientePaciente expediente
-                = new ExpedientePaciente(
-                        cedula.trim(),
-                        nombre.trim(),
-                        edad,
-                        genero.trim()
-                );
-
-        listaExpedientes.insertarExpediente(expediente);
-
-        return true;
-    }
-
-    /**
      * Busca un expediente por cédula.
      *
      * @param cedula cédula del paciente
      * @return expediente encontrado o null
      */
     public ExpedientePaciente buscarExpediente(String cedula) {
-
         if (cedula == null || cedula.trim().isEmpty()) {
             return null;
         }
@@ -315,28 +277,9 @@ public class GestorPacientes {
     }
 
     /**
-     * Posible se elimina, reemplaza registrarCita(paciente, ...)
-     */
-    public boolean registrarCita(String cedula, String doctor, String diagnostico) {
-        if (doctor == null || doctor.trim().isEmpty()
-                || diagnostico == null || diagnostico.trim().isEmpty()) {
-            return false;
-        }
-
-        ExpedientePaciente expediente = buscarExpediente(cedula);
-        if (expediente == null) {
-            return false;
-        }
-
-        Cita cita = new Cita(new Date(), doctor.trim(), diagnostico.trim());
-        expediente.agregarCita(cita);
-        return true;
-    }
-
-    /**
      * Registra un medicamento dentro del expediente.
      *
-     * @param cedula cédula del paciente
+     * @param paciente cédula del paciente
      * @param nombreMedicamento nombre del medicamento
      * @return true si fue registrado
      */
@@ -356,24 +299,6 @@ public class GestorPacientes {
         return true;
     }
     
-    /**
-     * Posible se elimine, reemplaza registrarMedicamento(paciente, ...)
-     */
-    public boolean registrarMedicamento(String cedula, String nombreMedicamento) {
-        if (nombreMedicamento == null
-            || nombreMedicamento.trim().isEmpty()) {
-            return false;
-        }
-
-        ExpedientePaciente expediente = buscarExpediente(cedula);
-        if (expediente == null) {
-            return false;
-        }
-
-        Medicamento medicamento = new Medicamento(new Date(), nombreMedicamento.trim());
-        expediente.agregarMedicamento(medicamento);
-        return true;
-    }
 
     /**
      * Muestra un expediente.
@@ -400,10 +325,15 @@ public class GestorPacientes {
      * @return expedientes registrados
      */
     public String mostrarTodosLosExpedientes() {
-
         return listaExpedientes.mostrarTodosLosExpedientes();
     }
 
+    /**
+     * Sobre carga de mostrarTodosLosExpedientes
+     * @param inicio posicion inicial
+     * @param cantidad cantidad de datos que se van a mostrar
+     * @return lista de Expedientes mostrados por x cantidad
+     */
     public String mostrarTodosLosExpedientes(int inicio, int cantidad) {
         return listaExpedientes.mostrarTodosLosExpedientes(inicio, cantidad);
     }
@@ -414,7 +344,6 @@ public class GestorPacientes {
      * @return primer expediente
      */
     public ExpedientePaciente iniciarNavegacionExpedientes() {
-
         return listaExpedientes.iniciarNavegacion();
     }
 
@@ -424,7 +353,6 @@ public class GestorPacientes {
      * @return siguiente expediente
      */
     public ExpedientePaciente siguienteExpediente() {
-
         return listaExpedientes.siguienteExpediente();
     }
 
@@ -434,7 +362,6 @@ public class GestorPacientes {
      * @return expediente anterior
      */
     public ExpedientePaciente anteriorExpediente() {
-
         return listaExpedientes.anteriorExpediente();
     }
 
@@ -444,7 +371,6 @@ public class GestorPacientes {
      * @return información de la bitácora
      */
     public String mostrarBitacora() {
-
         return listaBitacora.mostrar();
     }
 
@@ -465,7 +391,6 @@ public class GestorPacientes {
      * @return cantidad de pacientes atendidos
      */
     public int totalAtendidos() {
-
         return listaBitacora.contar();
     }
 
@@ -475,37 +400,25 @@ public class GestorPacientes {
      * @return información de las dos colas
      */
     public String mostrarPacientes() {
-
         String resultado = "";
-
         resultado += "====== COLA PREFERENCIAL ======\n";
 
         if (colaPreferencial.esVacia()) {
-
             resultado += "No hay pacientes preferenciales pendientes.\n";
-
         } else {
-
-            resultado += colaPreferencial.mostrarPaciente(
-                    0,
+            resultado += colaPreferencial.mostrarPaciente(0,
                     colaPreferencial.contarPacientes()
             );
         }
 
         resultado += "\n====== COLA REGULAR ======\n";
-
         if (colaRegular.esVacia()) {
-
             resultado += "No hay pacientes regulares pendientes.\n";
-
         } else {
-
-            resultado += colaRegular.mostrarPaciente(
-                    0,
+            resultado += colaRegular.mostrarPaciente(0,
                     colaRegular.contarPacientes()
             );
         }
-
         return resultado;
     }
 
@@ -515,11 +428,13 @@ public class GestorPacientes {
      * @return total de pacientes en ambas colas
      */
     public int totalPacientes() {
-
-        return colaPreferencial.contarPacientes()
-                + colaRegular.contarPacientes();
+        return colaPreferencial.contarPacientes() + colaRegular.contarPacientes();
     }
 
+    /**
+     * Cuenta los Expedientes
+     * @return numero de Expedientes 
+     */
     public int contarExpedientes() {
         return listaExpedientes.contarExpedientes();
     }
