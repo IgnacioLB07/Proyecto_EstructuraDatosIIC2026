@@ -3,7 +3,7 @@ package Menu;
 import javax.swing.JOptionPane;
 
 /**
- * Muestra el menu principal del sistema.
+ * Muestra el menú principal del sistema.
  *
  * @author nelson
  */
@@ -22,7 +22,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra el menu principal.
+     * Muestra el menú principal.
      */
     public void mostrarMenuPrincipal() {
 
@@ -49,9 +49,8 @@ public class MenuPrincipal {
 
                 } else {
 
-                    opcion =
-                            Integer.parseInt(
-                                    entrada.trim());
+                    opcion = Integer.parseInt(
+                            entrada.trim());
                 }
 
             } catch (NumberFormatException e) {
@@ -103,7 +102,8 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra la ayuda del sistema.
+     * Muestra la ayuda, versión, integrantes
+     * y funciones principales del sistema.
      */
     public void mostrarAyuda() {
 
@@ -118,13 +118,25 @@ public class MenuPrincipal {
                 + "Ignacio R. Leitón Benavides\n"
                 + "Johan Rodríguez Chaves\n"
                 + "Nelson Latino Valverde\n\n"
-                + "FUNCIONES:\n"
-                + "- Gestión de pacientes\n"
-                + "- Expedientes médicos mediante ABB\n"
-                + "- Carga de expedientes desde JSON\n"
-                + "- Historial de citas\n"
-                + "- Historial de medicamentos\n"
+                + "FUNCIONES DEL SISTEMA:\n"
+                + "- Gestión de llegada de pacientes\n"
+                + "- Atención de pacientes preferenciales y regulares\n"
+                + "- Registro y consulta de quejas\n"
                 + "- Bitácora de pacientes atendidos\n"
-                + "- Inteligencia Empresarial (BI)");
+                + "- Expediente único de pacientes mediante ABB\n"
+                + "- Carga de expedientes desde archivo JSON\n"
+                + "- Historial de citas médicas\n"
+                + "- Historial de medicamentos prescritos\n"
+                + "- Análisis de enfermedades más frecuentes\n"
+                + "- Segmentación de pacientes por edad\n"
+                + "- Detección de patrones mediante filtros\n"
+                + "- Propuesta de valor para pacientes prioritarios\n\n"
+                + "ESTRUCTURAS UTILIZADAS:\n"
+                + "- Colas dinámicas\n"
+                + "- Pilas dinámicas\n"
+                + "- Listas enlazadas simples\n"
+                + "- Listas circulares\n"
+                + "- Listas dobles circulares\n"
+                + "- Árbol Binario de Búsqueda");
     }
 }

@@ -8,13 +8,14 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Menu para gestionar los expedientes del ABB.
+ * Menú para gestionar los expedientes del ABB.
  *
  * @author nelson
  */
 public class MenuExpedientes {
 
     private GestorExpedientes gestorE;
+    private MenuBI menuBI;
 
     /**
      * Constructor.
@@ -22,10 +23,11 @@ public class MenuExpedientes {
     public MenuExpedientes() {
 
         gestorE = new GestorExpedientes();
+        menuBI = new MenuBI(gestorE);
     }
 
     /**
-     * Muestra el menu de expedientes.
+     * Muestra el menú de expedientes.
      */
     public void mostrarMenu() {
 
@@ -35,8 +37,8 @@ public class MenuExpedientes {
 
             try {
 
-                String entrada =
-                        JOptionPane.showInputDialog(
+                String entrada
+                        = JOptionPane.showInputDialog(
                                 "=================================\n"
                                 + "EXPEDIENTE ÚNICO DE PACIENTES\n"
                                 + "=================================\n\n"
@@ -44,18 +46,18 @@ public class MenuExpedientes {
                                 + "2. Buscar Expediente\n"
                                 + "3. Mostrar Expedientes\n"
                                 + "4. Cantidad de Expedientes\n"
-                                + "5. Regresar\n\n"
+                                + "5. Inteligencia Empresarial - BI\n"
+                                + "6. Regresar\n\n"
                                 + "Seleccione una opción:");
 
                 if (entrada == null) {
 
-                    opcion = 5;
+                    opcion = 6;
 
                 } else {
 
-                    opcion =
-                            Integer.parseInt(
-                                    entrada.trim());
+                    opcion = Integer.parseInt(
+                            entrada.trim());
                 }
 
             } catch (NumberFormatException e) {
@@ -86,6 +88,10 @@ public class MenuExpedientes {
                     break;
 
                 case 5:
+                    menuBI.mostrarMenu();
+                    break;
+
+                case 6:
                     break;
 
                 default:
@@ -100,7 +106,7 @@ public class MenuExpedientes {
                     break;
             }
 
-        } while (opcion != 5);
+        } while (opcion != 6);
     }
 
     /**
@@ -108,11 +114,11 @@ public class MenuExpedientes {
      */
     private void cargarArchivo() {
 
-        JFileChooser selector =
-                new JFileChooser();
+        JFileChooser selector
+                = new JFileChooser();
 
-        FileNameExtensionFilter filtro =
-                new FileNameExtensionFilter(
+        FileNameExtensionFilter filtro
+                = new FileNameExtensionFilter(
                         "Archivos JSON",
                         "json");
 
@@ -121,8 +127,8 @@ public class MenuExpedientes {
         selector.setDialogTitle(
                 "Seleccione el archivo JSON");
 
-        int resultado =
-                selector.showOpenDialog(null);
+        int resultado
+                = selector.showOpenDialog(null);
 
         if (resultado
                 != JFileChooser.APPROVE_OPTION) {
@@ -130,23 +136,22 @@ public class MenuExpedientes {
             return;
         }
 
-        File archivo =
-                selector.getSelectedFile();
+        File archivo
+                = selector.getSelectedFile();
 
         try {
 
-            int cargados =
-                    gestorE
+            int cargados
+                    = gestorE
                             .cargarExpedientesDesdeArchivo(
                                     archivo);
 
             JOptionPane.showMessageDialog(
                     null,
-                    "Archivo procesado.\n\n"
+                    "Archivo procesado correctamente.\n\n"
                     + "Expedientes cargados: "
                     + cargados
-                    + "\n"
-                    + "Total de expedientes: "
+                    + "\nTotal de expedientes: "
                     + gestorE.contarExpedientes());
 
         } catch (IOException e) {
@@ -159,12 +164,12 @@ public class MenuExpedientes {
     }
 
     /**
-     * Busca un expediente por cedula.
+     * Busca un expediente por cédula.
      */
     private void buscarExpediente() {
 
-        String cedula =
-                JOptionPane.showInputDialog(
+        String cedula
+                = JOptionPane.showInputDialog(
                         "Ingrese la cédula:");
 
         if (cedula == null) {
@@ -207,13 +212,7 @@ public class MenuExpedientes {
                 + gestorE.contarExpedientes());
     }
 
-    /**
-     * Devuelve el gestor.
-     *
-     * @return gestor de expedientes
-     */
     public GestorExpedientes getGestorE() {
-
         return gestorE;
     }
 }
