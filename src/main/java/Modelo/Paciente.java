@@ -17,6 +17,11 @@ public class Paciente {
     private String nombre;
     private Date fechaHoraLlegada;
     private String tipo;
+    
+    private int edad;
+    private String diagnostico;
+    private String genero;
+    private String medicamento;
 
     //Constructores
     /**
@@ -36,6 +41,42 @@ public class Paciente {
         this.fechaHoraLlegada = fechaHoraLlegada;
         this.tipo = tipo;
     }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public String getDiagnostico() {
+        return diagnostico;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getMedicamento() {
+        return medicamento;
+    }
+
+    public void setMedicamento(String medicamento) {
+        this.medicamento = medicamento;
+    }
+    
+    
+    
+    
     
     public Paciente() {}
 
