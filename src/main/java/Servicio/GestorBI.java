@@ -17,6 +17,11 @@ public class GestorBI {
 
     private ArbolExpedientes arbolE;
 
+    // Variables auxiliares para paginar la propuesta de valor
+    private int indicePrioridad;
+    private int mostradosPrioridad;
+    private String mensajePrioridad;
+
     /**
      * Constructor.
      *
@@ -27,7 +32,8 @@ public class GestorBI {
     }
 
     /**
-     * Genera el análisis de enfermedades más frecuentes.
+     * Genera el análisis completo de enfermedades
+     * más frecuentes.
      *
      * @return reporte de diagnósticos
      */
@@ -37,11 +43,7 @@ public class GestorBI {
             return "No existen expedientes cargados.";
         }
 
-        ListaDiagnosticos lista = new ListaDiagnosticos();
-
-        acumularDiagnosticos(
-                arbolE.getRaizExpediente(),
-                lista);
+        ListaDiagnosticos lista = crearListaDiagnosticos();
 
         String mensaje = "";
 
@@ -51,6 +53,62 @@ public class GestorBI {
         mensaje += lista.mostrarPorFrecuencia();
 
         return mensaje;
+    }
+
+    /**
+     * Genera una página del análisis de enfermedades
+     * más frecuentes.
+     *
+     * @param inicio posición inicial
+     * @param cantidad cantidad máxima por mostrar
+     * @return diagnósticos correspondientes a la página
+     */
+    public String analizarEnfermedades(
+            int inicio,
+            int cantidad) {
+
+        if (arbolE == null || arbolE.esVacia()) {
+            return "No existen expedientes cargados.";
+        }
+
+        ListaDiagnosticos lista = crearListaDiagnosticos();
+
+        return lista.mostrarPorFrecuencia(
+                inicio,
+                cantidad);
+    }
+
+    /**
+     * Cuenta la cantidad de diagnósticos diferentes.
+     *
+     * @return cantidad de diagnósticos
+     */
+    public int contarDiagnosticos() {
+
+        if (arbolE == null || arbolE.esVacia()) {
+            return 0;
+        }
+
+        ListaDiagnosticos lista = crearListaDiagnosticos();
+
+        return lista.contarDiagnosticos();
+    }
+
+    /**
+     * Crea y llena la lista de diagnósticos.
+     *
+     * @return lista con diagnósticos contabilizados
+     */
+    private ListaDiagnosticos crearListaDiagnosticos() {
+
+        ListaDiagnosticos lista =
+                new ListaDiagnosticos();
+
+        acumularDiagnosticos(
+                arbolE.getRaizExpediente(),
+                lista);
+
+        return lista;
     }
 
     /**
@@ -98,13 +156,16 @@ public class GestorBI {
         }
 
         int menores = contarPorGrupo(
-                arbolE.getRaizExpediente(), 1);
+                arbolE.getRaizExpediente(),
+                1);
 
         int adultos = contarPorGrupo(
-                arbolE.getRaizExpediente(), 2);
+                arbolE.getRaizExpediente(),
+                2);
 
         int adultosMayores = contarPorGrupo(
-                arbolE.getRaizExpediente(), 3);
+                arbolE.getRaizExpediente(),
+                3);
 
         int total = menores
                 + adultos
@@ -117,15 +178,19 @@ public class GestorBI {
         mensaje += "=================================\n\n";
 
         mensaje += "Menores de Edad: "
-                + menores + " pacientes.\n";
+                + menores
+                + " pacientes.\n";
 
         mensaje += "Adultos: "
-                + adultos + " pacientes.\n";
+                + adultos
+                + " pacientes.\n";
 
         mensaje += "Adultos Mayores: "
-                + adultosMayores + " pacientes.\n\n";
+                + adultosMayores
+                + " pacientes.\n\n";
 
-        mensaje += "Total de pacientes: " + total;
+        mensaje += "Total de pacientes: "
+                + total;
 
         return mensaje;
     }
@@ -155,6 +220,7 @@ public class GestorBI {
             int edad = expediente.getEdad();
 
             if (grupo == 1 && edad < 18) {
+
                 contador = 1;
 
             } else if (grupo == 2
@@ -182,9 +248,10 @@ public class GestorBI {
     }
 
     /**
-     * Realiza una consulta avanzada con uno o más parámetros.
+     * Realiza una consulta avanzada utilizando
+     * uno o más parámetros.
      *
-     * Para no utilizar las edades, se debe enviar -1.
+     * Para no utilizar las edades se debe enviar -1.
      *
      * @param edadInicial edad mínima
      * @param edadFinal edad máxima
@@ -205,7 +272,8 @@ public class GestorBI {
         }
 
         boolean usaEdad =
-                edadInicial >= 0 && edadFinal >= 0;
+                edadInicial >= 0
+                && edadFinal >= 0;
 
         boolean usaDiagnostico =
                 diagnostico != null
@@ -228,6 +296,7 @@ public class GestorBI {
         }
 
         if (usaEdad && edadInicial > edadFinal) {
+
             return "La edad inicial no puede ser "
                     + "mayor que la edad final.";
         }
@@ -250,31 +319,48 @@ public class GestorBI {
         mensaje += "---------------------------------\n";
 
         if (usaEdad) {
+
             mensaje += "Rango de edad: "
-                    + edadInicial + " a "
-                    + edadFinal + " años\n";
+                    + edadInicial
+                    + " a "
+                    + edadFinal
+                    + " años\n";
+
         } else {
+
             mensaje += "Rango de edad: No utilizado\n";
         }
 
         if (usaDiagnostico) {
+
             mensaje += "Diagnóstico: "
-                    + diagnostico.trim() + "\n";
+                    + diagnostico.trim()
+                    + "\n";
+
         } else {
+
             mensaje += "Diagnóstico: No utilizado\n";
         }
 
         if (usaGenero) {
+
             mensaje += "Género: "
-                    + genero.trim() + "\n";
+                    + genero.trim()
+                    + "\n";
+
         } else {
+
             mensaje += "Género: No utilizado\n";
         }
 
         if (usaMedicamento) {
+
             mensaje += "Medicamento: "
-                    + medicamento.trim() + "\n";
+                    + medicamento.trim()
+                    + "\n";
+
         } else {
+
             mensaje += "Medicamento: No utilizado\n";
         }
 
@@ -365,7 +451,8 @@ public class GestorBI {
             String medicamento) {
 
         boolean usaEdad =
-                edadInicial >= 0 && edadFinal >= 0;
+                edadInicial >= 0
+                && edadFinal >= 0;
 
         if (usaEdad
                 && (expediente.getEdad() < edadInicial
@@ -415,15 +502,9 @@ public class GestorBI {
     }
 
     /**
-     * Genera una propuesta de valor para identificar
-     * pacientes que requieren seguimiento prioritario.
+     * Genera el reporte completo de propuesta de valor.
      *
-     * Se consideran pacientes prioritarios quienes:
-     * - Tienen 65 años o más.
-     * - Poseen tres o más citas.
-     * - Poseen tres o más medicamentos prescritos.
-     *
-     * @return reporte de pacientes prioritarios
+     * @return reporte completo
      */
     public String generarPropuestaValor() {
 
@@ -431,11 +512,8 @@ public class GestorBI {
             return "No existen expedientes cargados.";
         }
 
-        String detalle = obtenerPacientesPrioritarios(
-                arbolE.getRaizExpediente());
-
-        int cantidad = contarPacientesPrioritarios(
-                arbolE.getRaizExpediente());
+        int cantidad =
+                contarPacientesPrioritarios();
 
         String mensaje = "";
 
@@ -444,35 +522,53 @@ public class GestorBI {
         mensaje += "PACIENTES DE ATENCIÓN PRIORITARIA\n";
         mensaje += "=================================\n\n";
 
-        mensaje += "Esta consulta identifica pacientes "
-                + "que podrían requerir seguimiento médico "
-                + "especial o mayor planificación de recursos.\n\n";
-
         mensaje += "Criterios utilizados:\n";
         mensaje += "- Tener 65 años o más.\n";
         mensaje += "- Tener 3 o más citas registradas.\n";
         mensaje += "- Tener 3 o más medicamentos prescritos.\n\n";
 
         mensaje += "Pacientes identificados: "
-                + cantidad + "\n\n";
+                + cantidad
+                + "\n\n";
 
         if (cantidad == 0) {
+
             mensaje += "No se identificaron pacientes "
                     + "de atención prioritaria.";
-        } else {
-            mensaje += detalle;
+
+            return mensaje;
         }
+
+        mensaje += generarPropuestaValor(
+                0,
+                cantidad);
 
         return mensaje;
     }
 
     /**
-     * Cuenta los pacientes prioritarios.
+     * Cuenta todos los pacientes que cumplen
+     * al menos un criterio de prioridad.
+     *
+     * @return cantidad de pacientes prioritarios
+     */
+    public int contarPacientesPrioritarios() {
+
+        if (arbolE == null || arbolE.esVacia()) {
+            return 0;
+        }
+
+        return contarPacientesPrioritariosRec(
+                arbolE.getRaizExpediente());
+    }
+
+    /**
+     * Cuenta recursivamente los pacientes prioritarios.
      *
      * @param nodoActual nodo actual
-     * @return cantidad de pacientes
+     * @return cantidad de pacientes prioritarios
      */
-    private int contarPacientesPrioritarios(
+    private int contarPacientesPrioritariosRec(
             NodoExpedienteArbol nodoActual) {
 
         if (nodoActual == null) {
@@ -490,32 +586,83 @@ public class GestorBI {
             contador = 1;
         }
 
-        contador += contarPacientesPrioritarios(
+        contador += contarPacientesPrioritariosRec(
                 nodoActual.getNodoIzq());
 
-        contador += contarPacientesPrioritarios(
+        contador += contarPacientesPrioritariosRec(
                 nodoActual.getNodoDer());
 
         return contador;
     }
 
     /**
-     * Construye el detalle de pacientes prioritarios.
+     * Genera una página de pacientes prioritarios.
      *
-     * @param nodoActual nodo actual
-     * @return detalle de pacientes
+     * @param inicio posición inicial
+     * @param cantidad cantidad máxima por mostrar
+     * @return pacientes correspondientes a la página
      */
-    private String obtenerPacientesPrioritarios(
-            NodoExpedienteArbol nodoActual) {
+    public String generarPropuestaValor(
+            int inicio,
+            int cantidad) {
 
-        if (nodoActual == null) {
-            return "";
+        if (arbolE == null || arbolE.esVacia()) {
+            return "No existen expedientes cargados.";
         }
 
-        String mensaje = "";
+        if (inicio < 0) {
+            inicio = 0;
+        }
 
-        mensaje += obtenerPacientesPrioritarios(
-                nodoActual.getNodoIzq());
+        if (cantidad <= 0) {
+            return "No hay pacientes para mostrar.";
+        }
+
+        indicePrioridad = 0;
+        mostradosPrioridad = 0;
+        mensajePrioridad = "";
+
+        obtenerPrioritariosPagina(
+                arbolE.getRaizExpediente(),
+                inicio,
+                cantidad);
+
+        if (mensajePrioridad.isEmpty()) {
+            return "No existen pacientes "
+                    + "prioritarios en esa posición.";
+        }
+
+        return mensajePrioridad;
+    }
+
+    /**
+     * Recorre el árbol en InOrden y obtiene solamente
+     * los pacientes prioritarios correspondientes
+     * a la página solicitada.
+     *
+     * @param nodoActual nodo actual
+     * @param inicio posición inicial
+     * @param cantidad cantidad máxima
+     */
+    private void obtenerPrioritariosPagina(
+            NodoExpedienteArbol nodoActual,
+            int inicio,
+            int cantidad) {
+
+        if (nodoActual == null
+                || mostradosPrioridad >= cantidad) {
+
+            return;
+        }
+
+        obtenerPrioritariosPagina(
+                nodoActual.getNodoIzq(),
+                inicio,
+                cantidad);
+
+        if (mostradosPrioridad >= cantidad) {
+            return;
+        }
 
         ExpedientePaciente expediente =
                 nodoActual.getDato();
@@ -523,60 +670,96 @@ public class GestorBI {
         if (expediente != null
                 && esPacientePrioritario(expediente)) {
 
-            int citas = contarCitas(expediente);
-            int medicamentos =
-                    contarMedicamentos(expediente);
+            if (indicePrioridad >= inicio) {
 
-            mensaje += "---------------------------------\n";
-            mensaje += "Cédula: "
-                    + expediente.getCedula() + "\n";
+                mensajePrioridad +=
+                        crearDetallePrioridad(
+                                expediente);
 
-            mensaje += "Nombre: "
-                    + expediente.getNombre() + "\n";
-
-            mensaje += "Edad: "
-                    + expediente.getEdad() + "\n";
-
-            mensaje += "Citas registradas: "
-                    + citas + "\n";
-
-            mensaje += "Medicamentos registrados: "
-                    + medicamentos + "\n";
-
-            mensaje += "Motivo de prioridad:\n";
-
-            if (expediente.getEdad() >= 65) {
-                mensaje += "- Adulto mayor.\n";
+                mostradosPrioridad++;
             }
 
-            if (citas >= 3) {
-                mensaje += "- Alto número de citas.\n";
-            }
-
-            if (medicamentos >= 3) {
-                mensaje += "- Alto número de medicamentos.\n";
-            }
-
-            mensaje += "\n";
+            indicePrioridad++;
         }
 
-        mensaje += obtenerPacientesPrioritarios(
-                nodoActual.getNodoDer());
+        obtenerPrioritariosPagina(
+                nodoActual.getNodoDer(),
+                inicio,
+                cantidad);
+    }
+
+    /**
+     * Crea la información de un paciente prioritario.
+     *
+     * @param expediente expediente del paciente
+     * @return detalle del paciente
+     */
+    private String crearDetallePrioridad(
+            ExpedientePaciente expediente) {
+
+        int citas = contarCitas(expediente);
+
+        int medicamentos =
+                contarMedicamentos(expediente);
+
+        String mensaje = "";
+
+        mensaje += "---------------------------------\n";
+
+        mensaje += "Cédula: "
+                + expediente.getCedula()
+                + "\n";
+
+        mensaje += "Nombre: "
+                + expediente.getNombre()
+                + "\n";
+
+        mensaje += "Edad: "
+                + expediente.getEdad()
+                + "\n";
+
+        mensaje += "Citas registradas: "
+                + citas
+                + "\n";
+
+        mensaje += "Medicamentos registrados: "
+                + medicamentos
+                + "\n";
+
+        mensaje += "Motivo de prioridad:\n";
+
+        if (expediente.getEdad() >= 65) {
+
+            mensaje += "- Adulto mayor.\n";
+        }
+
+        if (citas >= 3) {
+
+            mensaje += "- Alto número de citas.\n";
+        }
+
+        if (medicamentos >= 3) {
+
+            mensaje += "- Alto número de medicamentos.\n";
+        }
+
+        mensaje += "\n";
 
         return mensaje;
     }
 
     /**
-     * Determina si un paciente cumple algún criterio
-     * de prioridad.
+     * Determina si un paciente cumple al menos
+     * un criterio de prioridad.
      *
      * @param expediente expediente evaluado
-     * @return true si requiere prioridad
+     * @return true si es prioritario
      */
     private boolean esPacientePrioritario(
             ExpedientePaciente expediente) {
 
         int citas = contarCitas(expediente);
+
         int medicamentos =
                 contarMedicamentos(expediente);
 
@@ -601,19 +784,29 @@ public class GestorBI {
             return 0;
         }
 
-        NodoCita ultimo = expediente
-                .getHistoricoCitas()
-                .getUltimoCita();
+        NodoCita ultimo =
+                expediente.getHistoricoCitas()
+                        .getUltimoCita();
 
-        NodoCita actual = ultimo.getSiguiente();
+        if (ultimo == null) {
+            return 0;
+        }
+
+        NodoCita primero =
+                ultimo.getSiguiente();
+
+        NodoCita actual = primero;
 
         int contador = 0;
 
         do {
-            contador++;
-            actual = actual.getSiguiente();
 
-        } while (actual != ultimo.getSiguiente());
+            contador++;
+
+            actual =
+                    actual.getSiguiente();
+
+        } while (actual != primero);
 
         return contador;
     }
@@ -634,28 +827,50 @@ public class GestorBI {
             return 0;
         }
 
-        NodoMedicamento ultimo = expediente
-                .getHistoricoMedicamentos()
-                .getUltimoMedicamento();
+        NodoMedicamento ultimo =
+                expediente
+                        .getHistoricoMedicamentos()
+                        .getUltimoMedicamento();
+
+        if (ultimo == null) {
+            return 0;
+        }
+
+        NodoMedicamento primero =
+                ultimo.getSiguiente();
 
         NodoMedicamento actual =
-                ultimo.getSiguiente();
+                primero;
 
         int contador = 0;
 
         do {
-            contador++;
-            actual = actual.getSiguiente();
 
-        } while (actual != ultimo.getSiguiente());
+            contador++;
+
+            actual =
+                    actual.getSiguiente();
+
+        } while (actual != primero);
 
         return contador;
     }
 
+    /**
+     * Devuelve el árbol de expedientes.
+     *
+     * @return árbol de expedientes
+     */
     public ArbolExpedientes getArbolE() {
+
         return arbolE;
     }
 
+    /**
+     * Modifica el árbol de expedientes.
+     *
+     * @param arbolE nuevo árbol
+     */
     public void setArbolE(
             ArbolExpedientes arbolE) {
 

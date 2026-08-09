@@ -3,8 +3,11 @@ package Estructura;
 import EstructurasBase.ListaEnlazadaSimple;
 
 /**
- * Lista enlazada utilizada para contar los
+ * Lista enlazada utilizada para contabilizar los
  * diagnósticos encontrados en los expedientes.
+ *
+ * Los diagnósticos pueden mostrarse ordenados desde
+ * el más frecuente hasta el menos frecuente.
  *
  * Hereda de ListaEnlazadaSimple.
  *
@@ -36,7 +39,7 @@ public class ListaDiagnosticos
     /**
      * Registra un diagnóstico.
      *
-     * Si ya existe, aumenta su cantidad.
+     * Si el diagnóstico ya existe, aumenta su cantidad.
      * Si no existe, crea un nuevo nodo.
      *
      * @param diagnostico diagnóstico encontrado
@@ -76,7 +79,7 @@ public class ListaDiagnosticos
     }
 
     /**
-     * Busca un diagnóstico en la lista.
+     * Busca un diagnóstico dentro de la lista.
      *
      * @param diagnostico diagnóstico buscado
      * @return nodo encontrado o null
@@ -101,7 +104,7 @@ public class ListaDiagnosticos
     }
 
     /**
-     * Cuenta los diagnósticos diferentes.
+     * Cuenta los diagnósticos diferentes almacenados.
      *
      * @return cantidad de diagnósticos
      */
@@ -121,33 +124,70 @@ public class ListaDiagnosticos
     }
 
     /**
-     * Muestra los diagnósticos ordenados desde
+     * Muestra todos los diagnósticos ordenados desde
      * el más frecuente hasta el menos frecuente.
      *
-     * @return reporte de diagnósticos
+     * @return reporte completo de diagnósticos
      */
     public String mostrarPorFrecuencia() {
+
+        return mostrarPorFrecuencia(
+                0,
+                contarDiagnosticos());
+    }
+
+    /**
+     * Muestra los diagnósticos por páginas, ordenados
+     * desde el más frecuente hasta el menos frecuente.
+     *
+     * @param inicio posición inicial
+     * @param cantidad cantidad máxima por mostrar
+     * @return diagnósticos correspondientes a la página
+     */
+    public String mostrarPorFrecuencia(
+            int inicio,
+            int cantidad) {
 
         if (esVacia()) {
 
             return "No existen diagnósticos registrados.";
         }
 
+        if (inicio < 0) {
+
+            inicio = 0;
+        }
+
+        if (cantidad <= 0) {
+
+            return "No hay diagnósticos para mostrar.";
+        }
+
         reiniciarMostrados();
 
         String mensaje = "";
-        int total = contarDiagnosticos();
 
-        for (int i = 0; i < total; i++) {
+        int total = contarDiagnosticos();
+        int mostrados = 0;
+
+        for (int posicion = 0;
+                posicion < total
+                && mostrados < cantidad;
+                posicion++) {
 
             NodoDiagnostico mayor
                     = buscarMayorNoMostrado();
 
-            if (mayor != null) {
+            if (mayor == null) {
 
-                mensaje += mayor.getDiagnostico()
-                        + ": "
-                        + mayor.getCantidad();
+                break;
+            }
+
+            if (posicion >= inicio) {
+
+                mensaje += mayor.getDiagnostico();
+                mensaje += ": ";
+                mensaje += mayor.getCantidad();
 
                 if (mayor.getCantidad() == 1) {
 
@@ -158,18 +198,29 @@ public class ListaDiagnosticos
                     mensaje += " casos\n";
                 }
 
-                mayor.setMostrado(true);
+                mostrados++;
             }
+
+            mayor.setMostrado(true);
         }
 
         reiniciarMostrados();
+
+        if (mensaje.isEmpty()) {
+
+            return "No existen diagnósticos "
+                    + "en esa posición.";
+        }
 
         return mensaje;
     }
 
     /**
-     * Busca el diagnóstico con mayor cantidad
-     * que todavía no haya sido mostrado.
+     * Busca el diagnóstico con mayor cantidad que
+     * todavía no haya sido mostrado.
+     *
+     * Si dos diagnósticos tienen la misma cantidad,
+     * se utiliza el orden alfabético.
      *
      * @return nodo con mayor frecuencia
      */
@@ -220,10 +271,21 @@ public class ListaDiagnosticos
         }
     }
 
+    /**
+     * Devuelve el primer nodo.
+     *
+     * @return primer diagnóstico
+     */
     public NodoDiagnostico getPrimero() {
+
         return primero;
     }
 
+    /**
+     * Modifica el primer nodo.
+     *
+     * @param primero nuevo primer nodo
+     */
     public void setPrimero(
             NodoDiagnostico primero) {
 

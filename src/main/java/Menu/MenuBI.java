@@ -35,8 +35,8 @@ public class MenuBI {
 
             try {
 
-                String entrada =
-                        JOptionPane.showInputDialog(
+                String entrada
+                        = JOptionPane.showInputDialog(
                                 "=================================\n"
                                 + "INTELIGENCIA EMPRESARIAL - BI\n"
                                 + "=================================\n\n"
@@ -48,8 +48,11 @@ public class MenuBI {
                                 + "Seleccione una opción:");
 
                 if (entrada == null) {
+
                     opcion = 5;
+
                 } else {
+
                     opcion = Integer.parseInt(
                             entrada.trim());
                 }
@@ -66,9 +69,7 @@ public class MenuBI {
             switch (opcion) {
 
                 case 1:
-                    JOptionPane.showMessageDialog(
-                            null,
-                            gestorBI.analizarEnfermedades());
+                    mostrarEnfermedades();
                     break;
 
                 case 2:
@@ -82,9 +83,7 @@ public class MenuBI {
                     break;
 
                 case 4:
-                    JOptionPane.showMessageDialog(
-                            null,
-                            gestorBI.generarPropuestaValor());
+                    mostrarPropuestaValor();
                     break;
 
                 case 5:
@@ -93,6 +92,7 @@ public class MenuBI {
                 default:
 
                     if (opcion != 0) {
+
                         JOptionPane.showMessageDialog(
                                 null,
                                 "Opción inválida.");
@@ -105,12 +105,121 @@ public class MenuBI {
     }
 
     /**
+     * Muestra las enfermedades más frecuentes
+     * mediante paginación de cinco diagnósticos
+     * por ventana.
+     */
+    private void mostrarEnfermedades() {
+
+        int total
+                = gestorBI.contarDiagnosticos();
+
+        if (total == 0) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "No existen diagnósticos registrados.");
+
+            return;
+        }
+
+        int inicio = 0;
+        int cantidadPorPagina = 5;
+
+        while (inicio < total) {
+
+            int fin = Math.min(
+                    inicio + cantidadPorPagina,
+                    total);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "=================================\n"
+                    + "ENFERMEDADES MÁS FRECUENTES\n"
+                    + "=================================\n\n"
+                    + gestorBI.analizarEnfermedades(
+                            inicio,
+                            cantidadPorPagina)
+                    + "\nMostrando diagnósticos "
+                    + (inicio + 1)
+                    + " - "
+                    + fin
+                    + " de "
+                    + total);
+
+            inicio += cantidadPorPagina;
+        }
+    }
+
+    /**
+     * Muestra la propuesta de valor mediante
+     * paginación de un paciente prioritario
+     * por ventana.
+     */
+    private void mostrarPropuestaValor() {
+
+        int total
+                = gestorBI.contarPacientesPrioritarios();
+
+        if (total == 0) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "=================================\n"
+                    + "PROPUESTA DE VALOR\n"
+                    + "=================================\n\n"
+                    + "No se identificaron pacientes "
+                    + "de atención prioritaria.");
+
+            return;
+        }
+
+        int inicio = 0;
+        int cantidadPorPagina = 1;
+
+        JOptionPane.showMessageDialog(
+                null,
+                "=================================\n"
+                + "PROPUESTA DE VALOR\n"
+                + "PACIENTES DE ATENCIÓN PRIORITARIA\n"
+                + "=================================\n\n"
+                + "Esta consulta identifica pacientes "
+                + "que podrían requerir seguimiento médico "
+                + "especial o mayor planificación de recursos.\n\n"
+                + "Criterios utilizados:\n"
+                + "- Tener 65 años o más.\n"
+                + "- Tener 3 o más citas registradas.\n"
+                + "- Tener 3 o más medicamentos prescritos.\n\n"
+                + "Pacientes identificados: "
+                + total);
+
+        while (inicio < total) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "=================================\n"
+                    + "PACIENTE DE ATENCIÓN PRIORITARIA\n"
+                    + "=================================\n\n"
+                    + "Mostrando paciente "
+                    + (inicio + 1)
+                    + " de "
+                    + total
+                    + "\n\n"
+                    + gestorBI.generarPropuestaValor(
+                            inicio,
+                            cantidadPorPagina));
+
+            inicio += cantidadPorPagina;
+        }
+    }
+
+    /**
      * Solicita los parámetros de la consulta avanzada.
      */
     private void detectarPatrones() {
 
-        String edadInicialTexto =
-                JOptionPane.showInputDialog(
+        String edadInicialTexto
+                = JOptionPane.showInputDialog(
                         "Ingrese la edad inicial.\n"
                         + "Déjela vacía si no desea "
                         + "usar rango de edad:");
@@ -119,8 +228,8 @@ public class MenuBI {
             return;
         }
 
-        String edadFinalTexto =
-                JOptionPane.showInputDialog(
+        String edadFinalTexto
+                = JOptionPane.showInputDialog(
                         "Ingrese la edad final.\n"
                         + "Déjela vacía si no desea "
                         + "usar rango de edad:");
@@ -129,17 +238,17 @@ public class MenuBI {
             return;
         }
 
-        edadInicialTexto =
-                edadInicialTexto.trim();
+        edadInicialTexto
+                = edadInicialTexto.trim();
 
-        edadFinalTexto =
-                edadFinalTexto.trim();
+        edadFinalTexto
+                = edadFinalTexto.trim();
 
         int edadInicial = -1;
         int edadFinal = -1;
 
-        boolean algunaEdadIngresada =
-                !edadInicialTexto.isEmpty()
+        boolean algunaEdadIngresada
+                = !edadInicialTexto.isEmpty()
                 || !edadFinalTexto.isEmpty();
 
         if (algunaEdadIngresada) {
@@ -157,11 +266,13 @@ public class MenuBI {
 
             try {
 
-                edadInicial = Integer.parseInt(
-                        edadInicialTexto);
+                edadInicial
+                        = Integer.parseInt(
+                                edadInicialTexto);
 
-                edadFinal = Integer.parseInt(
-                        edadFinalTexto);
+                edadFinal
+                        = Integer.parseInt(
+                                edadFinalTexto);
 
                 if (edadInicial < 0
                         || edadFinal < 0) {
@@ -193,8 +304,8 @@ public class MenuBI {
             }
         }
 
-        String diagnostico =
-                JOptionPane.showInputDialog(
+        String diagnostico
+                = JOptionPane.showInputDialog(
                         "Ingrese el diagnóstico.\n"
                         + "Déjelo vacío si no desea "
                         + "utilizarlo:");
@@ -203,8 +314,8 @@ public class MenuBI {
             return;
         }
 
-        String genero =
-                JOptionPane.showInputDialog(
+        String genero
+                = JOptionPane.showInputDialog(
                         "Ingrese el género.\n"
                         + "Ejemplo: MASCULINO o FEMENINO.\n"
                         + "Déjelo vacío si no desea "
@@ -214,8 +325,8 @@ public class MenuBI {
             return;
         }
 
-        String medicamento =
-                JOptionPane.showInputDialog(
+        String medicamento
+                = JOptionPane.showInputDialog(
                         "Ingrese el medicamento.\n"
                         + "Déjelo vacío si no desea "
                         + "utilizarlo:");
@@ -228,8 +339,8 @@ public class MenuBI {
         genero = genero.trim();
         medicamento = medicamento.trim();
 
-        boolean sinParametros =
-                edadInicial == -1
+        boolean sinParametros
+                = edadInicial == -1
                 && diagnostico.isEmpty()
                 && genero.isEmpty()
                 && medicamento.isEmpty();
@@ -243,12 +354,13 @@ public class MenuBI {
             return;
         }
 
-        String reporte = gestorBI.detectarPatrones(
-                edadInicial,
-                edadFinal,
-                diagnostico,
-                genero,
-                medicamento);
+        String reporte
+                = gestorBI.detectarPatrones(
+                        edadInicial,
+                        edadFinal,
+                        diagnostico,
+                        genero,
+                        medicamento);
 
         JOptionPane.showMessageDialog(
                 null,
