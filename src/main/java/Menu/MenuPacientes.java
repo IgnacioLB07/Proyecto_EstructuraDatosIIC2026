@@ -5,6 +5,7 @@ import Estructura.ColaPacientes;
 import Modelo.Paciente;
 import Servicio.GestorPacientes;
 import javax.swing.JOptionPane;
+import Servicio.ConsultaAvanzada;
 
 /**
  * Muestra el menú de gestión de pacientes.
@@ -44,7 +45,9 @@ public class MenuPacientes {
                         + "4. Mostrar Pacientes Pendientes\n"
                         + "5. Mostrar Quejas\n"
                         + "6. Mostrar Bitácora del Día\n"
-                        + "7. Regresar\n\n"
+                        + "7. Consulta Avanzada\n"        
+                        + "8. Regresar\n\n"
+                                
                         + "Seleccione una opción:"
                 ));
 
@@ -79,10 +82,15 @@ public class MenuPacientes {
                     break;
 
                 case 7:
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Regresando al menú principal...");
-                    break;
+    ConsultaAvanzada consulta = new ConsultaAvanzada(gestorP);
+    consulta.realizarConsulta();
+    break;
+
+                case 8:
+                 JOptionPane.showMessageDialog(
+            null,
+            "Regresando al menú principal...");
+    break;
 
                 default:
                     JOptionPane.showMessageDialog(
@@ -90,7 +98,7 @@ public class MenuPacientes {
                             "Opción inválida.");
             }
 
-        } while (opcion != 7);
+        } while (opcion != 8);
 
     }
 
