@@ -8,7 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Menú para gestionar los expedientes del ABB.
+ * Menú para gestionar los expedientes almacenados
+ * en el Árbol Binario de Búsqueda.
  *
  * @author nelson
  */
@@ -23,6 +24,7 @@ public class MenuExpedientes {
     public MenuExpedientes() {
 
         gestorE = new GestorExpedientes();
+
         menuBI = new MenuBI(gestorE);
     }
 
@@ -42,7 +44,7 @@ public class MenuExpedientes {
                                 "=================================\n"
                                 + "EXPEDIENTE ÚNICO DE PACIENTES\n"
                                 + "=================================\n\n"
-                                + "1. Cargar Expediente desde Archivo\n"
+                                + "1. Cargar Expedientes desde Archivo\n"
                                 + "2. Buscar Expediente\n"
                                 + "3. Mostrar Expedientes\n"
                                 + "4. Cantidad de Expedientes\n"
@@ -92,6 +94,9 @@ public class MenuExpedientes {
                     break;
 
                 case 6:
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Regresando al menú principal...");
                     break;
 
                 default:
@@ -110,7 +115,7 @@ public class MenuExpedientes {
     }
 
     /**
-     * Selecciona y carga el archivo JSON.
+     * Permite seleccionar y cargar un archivo JSON.
      */
     private void cargarArchivo() {
 
@@ -158,7 +163,8 @@ public class MenuExpedientes {
 
             JOptionPane.showMessageDialog(
                     null,
-                    "Error al leer el archivo.\n"
+                    "No fue posible leer el archivo.\n"
+                    + "Detalle: "
                     + e.getMessage());
         }
     }
@@ -170,13 +176,16 @@ public class MenuExpedientes {
 
         String cedula
                 = JOptionPane.showInputDialog(
-                        "Ingrese la cédula:");
+                        "Ingrese la cédula del paciente:");
 
         if (cedula == null) {
+
             return;
         }
 
-        if (cedula.trim().isEmpty()) {
+        cedula = cedula.trim();
+
+        if (cedula.isEmpty()) {
 
             JOptionPane.showMessageDialog(
                     null,
@@ -188,17 +197,47 @@ public class MenuExpedientes {
         JOptionPane.showMessageDialog(
                 null,
                 gestorE.mostrarExpediente(
-                        cedula.trim()));
+                        cedula));
     }
 
     /**
-     * Muestra todos los expedientes.
+     * Muestra los expedientes registrados mediante
+     * paginación de un expediente por ventana.
      */
     private void mostrarExpedientes() {
 
-        JOptionPane.showMessageDialog(
-                null,
-                gestorE.mostrarExpedientes());
+        int total
+                = gestorE.contarExpedientes();
+
+        if (total == 0) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "No existen expedientes registrados.");
+
+            return;
+        }
+
+        int inicio = 0;
+
+        while (inicio < total) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "====================================\n"
+                    + "EXPEDIENTE MÉDICO - ABB\n"
+                    + "====================================\n\n"
+                    + "Mostrando expediente "
+                    + (inicio + 1)
+                    + " de "
+                    + total
+                    + "\n\n"
+                    + gestorE.mostrarExpedientes(
+                            inicio,
+                            1));
+
+            inicio++;
+        }
     }
 
     /**
@@ -208,11 +247,34 @@ public class MenuExpedientes {
 
         JOptionPane.showMessageDialog(
                 null,
-                "Cantidad de expedientes: "
+                "Cantidad de expedientes en el ABB: "
                 + gestorE.contarExpedientes());
     }
 
+    /**
+     * Devuelve el gestor de expedientes.
+     *
+     * @return gestor de expedientes
+     */
     public GestorExpedientes getGestorE() {
+
         return gestorE;
+    }
+
+    /**
+     * Modifica el gestor de expedientes.
+     *
+     * @param gestorE nuevo gestor
+     */
+    public void setGestorE(
+            GestorExpedientes gestorE) {
+
+        if (gestorE != null) {
+
+            this.gestorE = gestorE;
+
+            menuBI = new MenuBI(
+                    this.gestorE);
+        }
     }
 }

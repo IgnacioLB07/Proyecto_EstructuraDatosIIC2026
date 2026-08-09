@@ -21,6 +21,7 @@ public class GestorExpedientes {
     public GestorExpedientes() {
 
         arbolE = new ArbolExpedientes();
+
         cargadorJSON = new CargadorJSON(this);
     }
 
@@ -34,7 +35,8 @@ public class GestorExpedientes {
 
         if (arbolE == null) {
 
-            this.arbolE = new ArbolExpedientes();
+            this.arbolE
+                    = new ArbolExpedientes();
 
         } else {
 
@@ -55,7 +57,8 @@ public class GestorExpedientes {
 
         if (expediente == null
                 || expediente.getCedula() == null
-                || expediente.getCedula().trim().isEmpty()) {
+                || expediente.getCedula()
+                        .trim().isEmpty()) {
 
             return false;
         }
@@ -121,7 +124,8 @@ public class GestorExpedientes {
 
         if (expediente == null) {
 
-            return "No existe un expediente con esa cédula.";
+            return "No existe un expediente "
+                    + "con esa cédula.";
         }
 
         return expediente.mostrarExpediente();
@@ -135,6 +139,22 @@ public class GestorExpedientes {
     public String mostrarExpedientes() {
 
         return arbolE.mostrarInOrden();
+    }
+
+    /**
+     * Muestra expedientes mediante paginación.
+     *
+     * @param inicio posición inicial
+     * @param cantidad cantidad por mostrar
+     * @return expedientes solicitados
+     */
+    public String mostrarExpedientes(
+            int inicio,
+            int cantidad) {
+
+        return arbolE.mostrarInOrden(
+                inicio,
+                cantidad);
     }
 
     /**
@@ -167,11 +187,12 @@ public class GestorExpedientes {
 
         if (arbolE == null) {
 
-            this.arbolE = new ArbolExpedientes();
+            this.arbolE
+                    = new ArbolExpedientes();
 
         } else {
 
             this.arbolE = arbolE;
         }
     }
-}
+}   

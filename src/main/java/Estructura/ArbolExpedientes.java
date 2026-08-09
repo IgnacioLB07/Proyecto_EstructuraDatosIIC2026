@@ -4,8 +4,8 @@ import EstructurasBase.ArbolBinario;
 import Modelo.ExpedientePaciente;
 
 /**
- * Arbol Binario de Busqueda utilizado para almacenar
- * los expedientes medicos de los pacientes.
+ * Árbol Binario de Búsqueda utilizado para almacenar
+ * los expedientes médicos de los pacientes.
  *
  * Hereda de ArbolBinario.
  *
@@ -15,10 +15,15 @@ public class ArbolExpedientes extends ArbolBinario {
 
     private NodoExpedienteArbol raizExpediente;
 
+    // Atributos auxiliares para la paginación
+    private int indicePagina;
+    private int mostradosPagina;
+    private String mensajePagina;
+
     /**
      * Constructor cargado.
      *
-     * @param raizExpediente raiz del arbol
+     * @param raizExpediente raíz del árbol
      */
     public ArbolExpedientes(
             NodoExpedienteArbol raizExpediente) {
@@ -28,7 +33,7 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Constructor vacio.
+     * Constructor vacío.
      */
     public ArbolExpedientes() {
 
@@ -37,9 +42,9 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Verifica si el arbol esta vacio.
+     * Verifica si el árbol está vacío.
      *
-     * @return true si esta vacio
+     * @return true si está vacío
      */
     public boolean esVacia() {
 
@@ -106,11 +111,11 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Compara dos cedulas.
+     * Compara dos cédulas.
      *
-     * @param cedula1 primera cedula
-     * @param cedula2 segunda cedula
-     * @return resultado de la comparacion
+     * @param cedula1 primera cédula
+     * @param cedula2 segunda cédula
+     * @return resultado de la comparación
      */
     private int compararCedulas(
             String cedula1,
@@ -141,9 +146,9 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Busca un expediente por cedula.
+     * Busca un expediente por cédula.
      *
-     * @param cedula cedula por buscar
+     * @param cedula cédula por buscar
      * @return expediente encontrado o null
      */
     public ExpedientePaciente buscarExpediente(
@@ -164,7 +169,7 @@ public class ArbolExpedientes extends ArbolBinario {
      * Busca recursivamente un expediente.
      *
      * @param nodoActual nodo actual
-     * @param cedula cedula por buscar
+     * @param cedula cédula por buscar
      * @return expediente encontrado o null
      */
     private ExpedientePaciente buscarExpedienteRec(
@@ -198,7 +203,7 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Recorre el arbol en inOrden e imprime
+     * Recorre el árbol en InOrden e imprime
      * los expedientes en consola.
      */
     public void inOrden() {
@@ -208,7 +213,7 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Recorre recursivamente el arbol.
+     * Recorre recursivamente el árbol.
      *
      * @param nodoActual nodo actual
      */
@@ -229,7 +234,7 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Cuenta los expedientes del arbol.
+     * Cuenta los expedientes del árbol.
      *
      * @return cantidad de expedientes
      */
@@ -262,9 +267,9 @@ public class ArbolExpedientes extends ArbolBinario {
 
     /**
      * Muestra todos los expedientes ordenados
-     * por cedula.
+     * por cédula.
      *
-     * @return informacion de los expedientes
+     * @return información de los expedientes
      */
     public String mostrarInOrden() {
 
@@ -278,11 +283,11 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Construye recursivamente la informacion
-     * de los expedientes.
+     * Construye recursivamente la información
+     * de todos los expedientes.
      *
      * @param nodoActual nodo actual
-     * @return informacion de los expedientes
+     * @return información de los expedientes
      */
     private String mostrarInOrdenRec(
             NodoExpedienteArbol nodoActual) {
@@ -309,9 +314,101 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Devuelve la raiz del arbol.
+     * Muestra una cantidad de expedientes a partir
+     * de una posición determinada.
      *
-     * @return raiz del arbol
+     * @param inicio posición inicial
+     * @param cantidad cantidad de expedientes
+     * @return expedientes solicitados
+     */
+    public String mostrarInOrden(
+            int inicio,
+            int cantidad) {
+
+        if (esVacia()) {
+
+            return "No existen expedientes registrados.";
+        }
+
+        if (inicio < 0) {
+
+            inicio = 0;
+        }
+
+        if (cantidad <= 0) {
+
+            return "No hay expedientes para mostrar.";
+        }
+
+        indicePagina = 0;
+        mostradosPagina = 0;
+        mensajePagina = "";
+
+        mostrarPaginaRec(
+                raizExpediente,
+                inicio,
+                cantidad);
+
+        if (mensajePagina.isEmpty()) {
+
+            return "No existen expedientes en esa posición.";
+        }
+
+        return mensajePagina;
+    }
+
+    /**
+     * Recorre el árbol en InOrden y obtiene únicamente
+     * los expedientes correspondientes a una página.
+     *
+     * @param nodoActual nodo actual
+     * @param inicio posición inicial
+     * @param cantidad cantidad máxima
+     */
+    private void mostrarPaginaRec(
+            NodoExpedienteArbol nodoActual,
+            int inicio,
+            int cantidad) {
+
+        if (nodoActual == null
+                || mostradosPagina >= cantidad) {
+
+            return;
+        }
+
+        mostrarPaginaRec(
+                nodoActual.getNodoIzq(),
+                inicio,
+                cantidad);
+
+        if (mostradosPagina >= cantidad) {
+
+            return;
+        }
+
+        if (indicePagina >= inicio) {
+
+            mensajePagina
+                    += nodoActual.getDato()
+                            .mostrarExpediente();
+
+            mensajePagina += "\n\n";
+
+            mostradosPagina++;
+        }
+
+        indicePagina++;
+
+        mostrarPaginaRec(
+                nodoActual.getNodoDer(),
+                inicio,
+                cantidad);
+    }
+
+    /**
+     * Devuelve la raíz del árbol.
+     *
+     * @return raíz del árbol
      */
     public NodoExpedienteArbol getRaizExpediente() {
 
@@ -319,9 +416,9 @@ public class ArbolExpedientes extends ArbolBinario {
     }
 
     /**
-     * Modifica la raiz del arbol.
+     * Modifica la raíz del árbol.
      *
-     * @param raizExpediente nueva raiz
+     * @param raizExpediente nueva raíz
      */
     public void setRaizExpediente(
             NodoExpedienteArbol raizExpediente) {
