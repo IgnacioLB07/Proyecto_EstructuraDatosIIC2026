@@ -1,5 +1,7 @@
 package Servicio;
 
+
+
 import Estructura.ColaPacientes;
 import Estructura.ListaBitacora;
 import Estructura.ListaExpedientes;
@@ -9,6 +11,7 @@ import Modelo.ExpedientePaciente;
 import Modelo.Medicamento;
 import Modelo.Paciente;
 import java.util.Date;
+import java.util.ArrayList;
 
 /**
  * Gestiona las colas, expedientes y atención de pacientes.
@@ -28,6 +31,8 @@ public class GestorPacientes {
 
     private ListaExpedientes listaExpedientes;
     private ListaBitacora listaBitacora;
+    
+
 
     /**
      * Constructor del gestor de pacientes.
@@ -437,5 +442,37 @@ public class GestorPacientes {
      */
     public int contarExpedientes() {
         return listaExpedientes.contarExpedientes();
+        
+        
+        
     }
+    
+    public int consultarPacientes(
+        Integer edadInicial,
+        Integer edadFinal,
+        String diagnostico,
+        String genero,
+        String medicamento) {
+
+    int cantidad = 0;
+
+    cantidad += colaRegular.contarCoincidencias(
+            edadInicial,
+            edadFinal,
+            diagnostico,
+            genero,
+            medicamento);
+
+    cantidad += colaPreferencial.contarCoincidencias(
+            edadInicial,
+            edadFinal,
+            diagnostico,
+            genero,
+            medicamento);
+
+    return cantidad;
+    }
+    
+    
 }
+
