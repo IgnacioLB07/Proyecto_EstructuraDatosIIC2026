@@ -3,20 +3,26 @@ package Menu;
 import javax.swing.JOptionPane;
 
 /**
- * Muestra el menú principal del sistema.
+ * Muestra el menu principal del sistema.
  *
  * @author nelson
  */
 public class MenuPrincipal {
 
     private MenuPacientes menuP;
+    private MenuExpedientes menuE;
 
+    /**
+     * Constructor.
+     */
     public MenuPrincipal() {
+
         menuP = new MenuPacientes();
+        menuE = new MenuExpedientes();
     }
 
     /**
-     * Muestra el menú principal.
+     * Muestra el menu principal.
      */
     public void mostrarMenuPrincipal() {
 
@@ -26,20 +32,26 @@ public class MenuPrincipal {
 
             try {
 
-                String entrada = JOptionPane.showInputDialog(
-                        "=================================\n"
-                        + "BIENVENIDO A HOSPITAL 'SU SALUD'\n"
-                        + "=================================\n\n"
-                        + "1. Gestionar Llegada de Pacientes\n"
-                        + "2. Ayuda\n"
-                        + "3. Salir\n\n"
-                        + "Seleccione una opción:"
-                );
+                String entrada =
+                        JOptionPane.showInputDialog(
+                                "=================================\n"
+                                + "BIENVENIDO A HOSPITAL 'SU SALUD'\n"
+                                + "=================================\n\n"
+                                + "1. Gestionar Llegada de Pacientes\n"
+                                + "2. Gestionar Expedientes ABB\n"
+                                + "3. Ayuda\n"
+                                + "4. Salir\n\n"
+                                + "Seleccione una opción:");
 
                 if (entrada == null) {
-                    opcion = 3;
+
+                    opcion = 4;
+
                 } else {
-                    opcion = Integer.parseInt(entrada.trim());
+
+                    opcion =
+                            Integer.parseInt(
+                                    entrada.trim());
                 }
 
             } catch (NumberFormatException e) {
@@ -54,14 +66,22 @@ public class MenuPrincipal {
             switch (opcion) {
 
                 case 1:
+
                     menuP.mostrarMenu();
                     break;
 
                 case 2:
-                    mostrarAyuda();
+
+                    menuE.mostrarMenu();
                     break;
 
                 case 3:
+
+                    mostrarAyuda();
+                    break;
+
+                case 4:
+
                     JOptionPane.showMessageDialog(
                             null,
                             "GRACIAS POR UTILIZAR EL SISTEMA");
@@ -79,8 +99,7 @@ public class MenuPrincipal {
                     break;
             }
 
-        } while (opcion != 3);
-
+        } while (opcion != 4);
     }
 
     /**
@@ -101,9 +120,11 @@ public class MenuPrincipal {
                 + "Nelson Latino Valverde\n\n"
                 + "FUNCIONES:\n"
                 + "- Gestión de pacientes\n"
-                + "- Expedientes médicos\n"
+                + "- Expedientes médicos mediante ABB\n"
+                + "- Carga de expedientes desde JSON\n"
                 + "- Historial de citas\n"
                 + "- Historial de medicamentos\n"
-                + "- Bitácora de pacientes atendidos");
+                + "- Bitácora de pacientes atendidos\n"
+                + "- Inteligencia Empresarial (BI)");
     }
 }

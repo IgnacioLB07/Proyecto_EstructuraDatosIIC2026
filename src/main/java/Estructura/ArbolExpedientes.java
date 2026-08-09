@@ -4,155 +4,328 @@ import EstructurasBase.ArbolBinario;
 import Modelo.ExpedientePaciente;
 
 /**
- * Clase ArbolExpedientes, almacena la lógica de una EEDD Arbol Binario de
- * Busqueda hereda de ArbolBinario
+ * Arbol Binario de Busqueda utilizado para almacenar
+ * los expedientes medicos de los pacientes.
+ *
+ * Hereda de ArbolBinario.
  *
  * @author ignap
  */
 public class ArbolExpedientes extends ArbolBinario {
 
-    //Atributos
     private NodoExpedienteArbol raizExpediente;
 
     /**
-     * Constructor cargado
+     * Constructor cargado.
      *
-     * @param raizExpediente
+     * @param raizExpediente raiz del arbol
      */
-    public ArbolExpedientes(NodoExpedienteArbol raizExpediente) {
+    public ArbolExpedientes(
+            NodoExpedienteArbol raizExpediente) {
+
         super();
         this.raizExpediente = raizExpediente;
     }
 
     /**
-     * Constructor vacio
+     * Constructor vacio.
      */
     public ArbolExpedientes() {
+
+        super();
+        raizExpediente = null;
     }
 
     /**
-     * Metodo que verifica si la EEDD esta vacia
+     * Verifica si el arbol esta vacio.
      *
-     * @return true/false
+     * @return true si esta vacio
      */
     public boolean esVacia() {
+
         return raizExpediente == null;
     }
 
     /**
-     * Metodo warpper para insertar el expediente
+     * Inserta un expediente en el ABB.
      *
-     * @param expediente datos del expediente
+     * @param expediente expediente del paciente
      */
-    public void insertar(ExpedientePaciente expediente) {
-        if (expediente == null || expediente.getCedula() == null) {
+    public void insertar(
+            ExpedientePaciente expediente) {
+
+        if (expediente == null
+                || expediente.getCedula() == null
+                || expediente.getCedula().trim().isEmpty()) {
+
             return;
         }
 
-        raizExpediente = insertarRec(raizExpediente, expediente);
+        raizExpediente = insertarRec(
+                raizExpediente,
+                expediente);
     }
 
     /**
-     * Método recursivo para insertar en el ABB
+     * Inserta recursivamente un expediente.
      *
-     * @param nodoActual recibe la raiz y crea un nodo auxiliar
-     * @param expediente recibe los datos del expediente
-     * @return el nodo actual
+     * @param nodoActual nodo actual
+     * @param expediente expediente por insertar
+     * @return nodo actualizado
      */
-    private NodoExpedienteArbol insertarRec(NodoExpedienteArbol nodoActual, ExpedientePaciente expediente) {
+    private NodoExpedienteArbol insertarRec(
+            NodoExpedienteArbol nodoActual,
+            ExpedientePaciente expediente) {
+
         if (nodoActual == null) {
-            return new NodoExpedienteArbol(expediente);
+
+            return new NodoExpedienteArbol(
+                    expediente);
         }
 
-        int comparacion = compararCedulas(expediente.getCedula(), nodoActual.getDato().getCedula());
+        int comparacion = compararCedulas(
+                expediente.getCedula(),
+                nodoActual.getDato().getCedula());
+
         if (comparacion < 0) {
-            nodoActual.setNodoIzq(insertarRec(nodoActual.getNodoIzq(), expediente));
+
+            nodoActual.setNodoIzq(
+                    insertarRec(
+                            nodoActual.getNodoIzq(),
+                            expediente));
+
         } else if (comparacion > 0) {
-            nodoActual.setNodoDer(insertarRec(nodoActual.getNodoDer(), expediente));
+
+            nodoActual.setNodoDer(
+                    insertarRec(
+                            nodoActual.getNodoDer(),
+                            expediente));
         }
 
         return nodoActual;
     }
 
     /**
-     * Metodo que compara dos cedulas
+     * Compara dos cedulas.
      *
-     * @param cedula1 cedula 1
-     * @param cedula2 cedula 2
-     * @return valor de la comparacion entre cedulas
+     * @param cedula1 primera cedula
+     * @param cedula2 segunda cedula
+     * @return resultado de la comparacion
      */
-    private int compararCedulas(String cedula1, String cedula2) {
-        String valor1 = cedula1.replace("-", "").trim();
-        String valor2 = cedula2.replace("-", "").trim();
+    private int compararCedulas(
+            String cedula1,
+            String cedula2) {
+
+        String valor1 = cedula1
+                .replace("-", "")
+                .trim();
+
+        String valor2 = cedula2
+                .replace("-", "")
+                .trim();
 
         try {
+
             long numero1 = Long.parseLong(valor1);
             long numero2 = Long.parseLong(valor2);
-            return Long.compare(numero1, numero2);
+
+            return Long.compare(
+                    numero1,
+                    numero2);
 
         } catch (NumberFormatException e) {
-            return valor1.compareToIgnoreCase(valor2);
+
+            return valor1.compareToIgnoreCase(
+                    valor2);
         }
     }
 
     /**
-     * Metodo warpper inOrden
+     * Busca un expediente por cedula.
+     *
+     * @param cedula cedula por buscar
+     * @return expediente encontrado o null
+     */
+    public ExpedientePaciente buscarExpediente(
+            String cedula) {
+
+        if (cedula == null
+                || cedula.trim().isEmpty()) {
+
+            return null;
+        }
+
+        return buscarExpedienteRec(
+                raizExpediente,
+                cedula.trim());
+    }
+
+    /**
+     * Busca recursivamente un expediente.
+     *
+     * @param nodoActual nodo actual
+     * @param cedula cedula por buscar
+     * @return expediente encontrado o null
+     */
+    private ExpedientePaciente buscarExpedienteRec(
+            NodoExpedienteArbol nodoActual,
+            String cedula) {
+
+        if (nodoActual == null) {
+
+            return null;
+        }
+
+        int comparacion = compararCedulas(
+                cedula,
+                nodoActual.getDato().getCedula());
+
+        if (comparacion == 0) {
+
+            return nodoActual.getDato();
+        }
+
+        if (comparacion < 0) {
+
+            return buscarExpedienteRec(
+                    nodoActual.getNodoIzq(),
+                    cedula);
+        }
+
+        return buscarExpedienteRec(
+                nodoActual.getNodoDer(),
+                cedula);
+    }
+
+    /**
+     * Recorre el arbol en inOrden e imprime
+     * los expedientes en consola.
      */
     public void inOrden() {
+
         inOrdenRec(raizExpediente);
         System.out.println();
     }
 
     /**
-     * Metodo recursivo que imprime el ABB en inOrden
+     * Recorre recursivamente el arbol.
      *
-     * @param nodoActual
+     * @param nodoActual nodo actual
      */
-    private void inOrdenRec(NodoExpedienteArbol nodoActual) {
+    private void inOrdenRec(
+            NodoExpedienteArbol nodoActual) {
+
         if (nodoActual != null) {
-            inOrdenRec(nodoActual.getNodoIzq());
-            System.out.print(nodoActual.getDato() + ", ");
-            inOrdenRec(nodoActual.getNodoDer());
-        }
 
+            inOrdenRec(
+                    nodoActual.getNodoIzq());
+
+            System.out.println(
+                    nodoActual.getDato());
+
+            inOrdenRec(
+                    nodoActual.getNodoDer());
+        }
     }
 
     /**
-     * 
-     * @param cedula
-     * @return 
+     * Cuenta los expedientes del arbol.
+     *
+     * @return cantidad de expedientes
      */
-    public ExpedientePaciente buscarExpediente(String cedula) {
-        if (cedula == null || cedula.trim().isEmpty()) {
-            return null;
-        }
+    public int contarExpedientes() {
 
-        return buscarExpedienteRec(raizExpediente, cedula);
+        return contarExpedientesRec(
+                raizExpediente);
     }
 
     /**
-     * 
-     * @param nodoActual
-     * @param cedula
-     * @return 
+     * Cuenta recursivamente los expedientes.
+     *
+     * @param nodoActual nodo actual
+     * @return cantidad de nodos
      */
-    private ExpedientePaciente buscarExpedienteRec(NodoExpedienteArbol nodoActual, String cedula) {
+    private int contarExpedientesRec(
+            NodoExpedienteArbol nodoActual) {
+
         if (nodoActual == null) {
-            return null;
+
+            return 0;
         }
 
-//        NodoExpedienteArbol nodo = (NodoExpedienteArbol) nodoActual; eliminar
-
-        int comparacion = compararCedulas(cedula, nodoActual.getDato().getCedula());
-        if (comparacion == 0) {
-            return nodoActual.getDato();
-        }
-
-        if (comparacion < 0) {
-            return buscarExpedienteRec(nodoActual.getNodoIzq(), cedula);
-        }
-
-        return buscarExpedienteRec(nodoActual.getNodoDer(), cedula);
+        return 1
+                + contarExpedientesRec(
+                        nodoActual.getNodoIzq())
+                + contarExpedientesRec(
+                        nodoActual.getNodoDer());
     }
 
+    /**
+     * Muestra todos los expedientes ordenados
+     * por cedula.
+     *
+     * @return informacion de los expedientes
+     */
+    public String mostrarInOrden() {
+
+        if (esVacia()) {
+
+            return "No existen expedientes registrados.";
+        }
+
+        return mostrarInOrdenRec(
+                raizExpediente);
+    }
+
+    /**
+     * Construye recursivamente la informacion
+     * de los expedientes.
+     *
+     * @param nodoActual nodo actual
+     * @return informacion de los expedientes
+     */
+    private String mostrarInOrdenRec(
+            NodoExpedienteArbol nodoActual) {
+
+        if (nodoActual == null) {
+
+            return "";
+        }
+
+        String mensaje = "";
+
+        mensaje += mostrarInOrdenRec(
+                nodoActual.getNodoIzq());
+
+        mensaje += nodoActual.getDato()
+                .mostrarExpediente();
+
+        mensaje += "\n\n";
+
+        mensaje += mostrarInOrdenRec(
+                nodoActual.getNodoDer());
+
+        return mensaje;
+    }
+
+    /**
+     * Devuelve la raiz del arbol.
+     *
+     * @return raiz del arbol
+     */
+    public NodoExpedienteArbol getRaizExpediente() {
+
+        return raizExpediente;
+    }
+
+    /**
+     * Modifica la raiz del arbol.
+     *
+     * @param raizExpediente nueva raiz
+     */
+    public void setRaizExpediente(
+            NodoExpedienteArbol raizExpediente) {
+
+        this.raizExpediente = raizExpediente;
+    }
 }
