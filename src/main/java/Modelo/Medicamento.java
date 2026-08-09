@@ -1,5 +1,5 @@
-
 package Modelo;
+
 import java.util.Date;
 /**
  * Representa un medicamento prescrito a un paciente.
