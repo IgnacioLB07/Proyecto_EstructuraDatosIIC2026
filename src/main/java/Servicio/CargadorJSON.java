@@ -35,16 +35,9 @@ public class CargadorJSON {
      *
      * @param gestorExpedientes gestor de expedientes
      */
-    public CargadorJSON(
-            GestorExpedientes gestorExpedientes) {
-
-        this.gestorExpedientes
-                = gestorExpedientes;
-
-        formatoFecha
-                = new SimpleDateFormat(
-                        "yyyy-MM-dd HH:mm:ss");
-
+    public CargadorJSON(GestorExpedientes gestorExpedientes) {
+        this.gestorExpedientes = gestorExpedientes;
+        formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         formatoFecha.setLenient(false);
     }
 
@@ -55,20 +48,13 @@ public class CargadorJSON {
      * @return cantidad de expedientes cargados
      * @throws IOException error de lectura
      */
-    public int cargarArchivo(
-            File archivo) throws IOException {
-
-        if (archivo == null
-                || !archivo.exists()) {
-
+    public int cargarArchivo(File archivo) throws IOException {
+        if (archivo == null || !archivo.exists()) {
             return 0;
         }
 
-        String contenido
-                = leerArchivo(archivo);
-
-        return procesarPacientes(
-                contenido);
+        String contenido = leerArchivo(archivo);
+        return procesarPacientes(contenido);
     }
 
     /**
@@ -78,27 +64,17 @@ public class CargadorJSON {
      * @return contenido del archivo
      * @throws IOException error de lectura
      */
-    private String leerArchivo(
-            File archivo) throws IOException {
-
-        BufferedReader lector
-                = new BufferedReader(
-                        new FileReader(archivo));
-
-        StringBuilder contenido
-                = new StringBuilder();
-
+    private String leerArchivo(File archivo) throws IOException {
+        BufferedReader lector = new BufferedReader(new FileReader(archivo));
+        StringBuilder contenido = new StringBuilder();
         String linea;
 
-        while ((linea
-                = lector.readLine()) != null) {
-
+        while ((linea = lector.readLine()) != null) {
             contenido.append(linea);
             contenido.append("\n");
         }
 
         lector.close();
-
         return contenido.toString();
     }
 
@@ -109,54 +85,35 @@ public class CargadorJSON {
      * @param contenido contenido JSON
      * @return cantidad de pacientes cargados
      */
-    private int procesarPacientes(
-            String contenido) {
-
+    private int procesarPacientes(String contenido) {
         int cargados = 0;
         int nivelLlaves = 0;
         int inicioObjeto = -1;
-
         boolean dentroTexto = false;
-
         char anterior = '\0';
 
-        for (int i = 0;
-                i < contenido.length();
-                i++) {
+        for (int i = 0; i < contenido.length(); i++) {
+            char caracter = contenido.charAt(i);
 
-            char caracter
-                    = contenido.charAt(i);
-
-            if (caracter == '"'
-                    && anterior != '\\') {
-
+            if (caracter == '"' && anterior != '\\') {
                 dentroTexto = !dentroTexto;
             }
 
             if (!dentroTexto) {
-
                 if (caracter == '{') {
-
                     nivelLlaves++;
 
                     if (nivelLlaves == 1) {
-
                         inicioObjeto = i;
                     }
 
                 } else if (caracter == '}') {
+                    if (nivelLlaves == 1 && inicioObjeto >= 0) {
 
-                    if (nivelLlaves == 1
-                            && inicioObjeto >= 0) {
+                        String paciente = contenido.substring(
+                                        inicioObjeto, i + 1);
 
-                        String paciente
-                                = contenido.substring(
-                                        inicioObjeto,
-                                        i + 1);
-
-                        if (procesarPaciente(
-                                paciente)) {
-
+                        if (procesarPaciente(paciente)) {
                             cargados++;
                         }
 
@@ -179,24 +136,12 @@ public class CargadorJSON {
      * @param objetoPaciente informacion JSON
      * @return true si se registro
      */
-    private boolean procesarPaciente(
-            String objetoPaciente) {
+    private boolean procesarPaciente(String objetoPaciente) {
 
-        String cedula = obtenerTexto(
-                objetoPaciente,
-                "CEDULA");
-
-        String nombre = obtenerTexto(
-                objetoPaciente,
-                "NOMBRE");
-
-        int edad = obtenerNumero(
-                objetoPaciente,
-                "EDAD");
-
-        String genero = obtenerTexto(
-                objetoPaciente,
-                "GENERO");
+        String cedula = obtenerTexto(objetoPaciente, "CEDULA");
+        String nombre = obtenerTexto(objetoPaciente, "NOMBRE");
+        int edad = obtenerNumero(objetoPaciente, "EDAD");
+        String genero = obtenerTexto(objetoPaciente, "GENERO");
 
         if (cedula == null
                 || nombre == null
@@ -206,33 +151,21 @@ public class CargadorJSON {
             return false;
         }
 
-        ExpedientePaciente expediente
-                = new ExpedientePaciente(
-                        cedula,
-                        nombre,
-                        edad,
-                        genero);
+        ExpedientePaciente expediente = new ExpedientePaciente(
+                cedula,
+                nombre,
+                edad,
+                genero);
 
-        String citas = obtenerArreglo(
-                objetoPaciente,
-                "CITAS");
+        String citas = obtenerArreglo(objetoPaciente, "CITAS");
 
-        procesarCitas(
-                citas,
-                expediente);
+        procesarCitas(citas, expediente);
 
-        String medicamentos
-                = obtenerArreglo(
-                        objetoPaciente,
-                        "MEDICAMENTOS");
+        String medicamentos = obtenerArreglo(objetoPaciente, "MEDICAMENTOS");
 
-        procesarMedicamentos(
-                medicamentos,
-                expediente);
+        procesarMedicamentos(medicamentos, expediente);
 
-        return gestorExpedientes
-                .registrarExpediente(
-                        expediente);
+        return gestorExpedientes.registrarExpediente(expediente);
     }
 
     /**
@@ -241,38 +174,25 @@ public class CargadorJSON {
      * @param contenido contenido de citas
      * @param expediente expediente
      */
-    private void procesarCitas(
-            String contenido,
-            ExpedientePaciente expediente) {
-
+    private void procesarCitas(String contenido, ExpedientePaciente expediente) {
         if (contenido == null) {
             return;
         }
 
         int nivel = 0;
         int inicio = -1;
-
         boolean dentroTexto = false;
-
         char anterior = '\0';
 
-        for (int i = 0;
-                i < contenido.length();
-                i++) {
+        for (int i = 0; i < contenido.length(); i++) {
+            char caracter = contenido.charAt(i);
 
-            char caracter
-                    = contenido.charAt(i);
-
-            if (caracter == '"'
-                    && anterior != '\\') {
-
+            if (caracter == '"' && anterior != '\\') {
                 dentroTexto = !dentroTexto;
             }
 
             if (!dentroTexto) {
-
                 if (caracter == '{') {
-
                     nivel++;
 
                     if (nivel == 1) {
@@ -280,19 +200,10 @@ public class CargadorJSON {
                     }
 
                 } else if (caracter == '}') {
+                    if (nivel == 1 && inicio >= 0) {
 
-                    if (nivel == 1
-                            && inicio >= 0) {
-
-                        String cita
-                                = contenido.substring(
-                                        inicio,
-                                        i + 1);
-
-                        agregarCita(
-                                cita,
-                                expediente);
-
+                        String cita = contenido.substring(inicio, i + 1);
+                        agregarCita(cita, expediente);
                         inicio = -1;
                     }
 
@@ -310,41 +221,21 @@ public class CargadorJSON {
      * @param objetoCita informacion de cita
      * @param expediente expediente
      */
-    private void agregarCita(
-            String objetoCita,
-            ExpedientePaciente expediente) {
+    private void agregarCita(String objetoCita, ExpedientePaciente expediente) {
 
-        String fechaTexto
-                = obtenerTexto(
-                        objetoCita,
-                        "FECHA");
+        String fechaTexto = obtenerTexto(objetoCita, "FECHA");
 
-        String medico
-                = obtenerTexto(
-                        objetoCita,
-                        "MEDICO");
+        String medico = obtenerTexto(objetoCita, "MEDICO");
 
-        String diagnostico
-                = obtenerTexto(
-                        objetoCita,
-                        "DIAGNOSTICO");
+        String diagnostico = obtenerTexto(objetoCita, "DIAGNOSTICO");
 
-        Date fecha
-                = convertirFecha(
-                        fechaTexto);
+        Date fecha = convertirFecha(fechaTexto);
 
-        if (fecha == null
-                || medico == null
-                || diagnostico == null) {
-
+        if (fecha == null || medico == null || diagnostico == null) {
             return;
         }
 
-        Cita cita = new Cita(
-                fecha,
-                medico,
-                diagnostico);
-
+        Cita cita = new Cita(fecha, medico, diagnostico);
         expediente.agregarCita(cita);
     }
 
@@ -354,42 +245,29 @@ public class CargadorJSON {
      * @param contenido contenido de medicamentos
      * @param expediente expediente
      */
-    private void procesarMedicamentos(
-            String contenido,
-            ExpedientePaciente expediente) {
-
+    private void procesarMedicamentos(String contenido, ExpedientePaciente expediente) {
         if (contenido == null) {
             return;
         }
 
         int nivel = 0;
         int inicio = -1;
-
         boolean dentroTexto = false;
-
         char anterior = '\0';
 
-        for (int i = 0;
-                i < contenido.length();
-                i++) {
+        for (int i = 0; i < contenido.length(); i++) {
+            char caracter = contenido.charAt(i);
 
-            char caracter
-                    = contenido.charAt(i);
-
-            if (caracter == '"'
-                    && anterior != '\\') {
-
+            if (caracter == '"' && anterior != '\\') {
                 dentroTexto = !dentroTexto;
             }
 
             if (!dentroTexto) {
 
                 if (caracter == '{') {
-
                     nivel++;
 
                     if (nivel == 1) {
-
                         inicio = i;
                     }
 
@@ -398,14 +276,8 @@ public class CargadorJSON {
                     if (nivel == 1
                             && inicio >= 0) {
 
-                        String medicamento
-                                = contenido.substring(
-                                        inicio,
-                                        i + 1);
-
-                        agregarMedicamento(
-                                medicamento,
-                                expediente);
+                        String medicamento = contenido.substring(inicio, i + 1);
+                        agregarMedicamento(medicamento, expediente);
 
                         inicio = -1;
                     }
@@ -424,37 +296,19 @@ public class CargadorJSON {
      * @param objetoMedicamento informacion
      * @param expediente expediente
      */
-    private void agregarMedicamento(
-            String objetoMedicamento,
-            ExpedientePaciente expediente) {
+    private void agregarMedicamento(String objetoMedicamento, ExpedientePaciente expediente) {
+        String fechaTexto = obtenerTexto(objetoMedicamento, "FECHA");
 
-        String fechaTexto
-                = obtenerTexto(
-                        objetoMedicamento,
-                        "FECHA");
+        String nombreMedicamento = obtenerTexto(objetoMedicamento, "MEDICAMENTO");
 
-        String nombreMedicamento
-                = obtenerTexto(
-                        objetoMedicamento,
-                        "MEDICAMENTO");
+        Date fecha = convertirFecha(fechaTexto);
 
-        Date fecha
-                = convertirFecha(
-                        fechaTexto);
-
-        if (fecha == null
-                || nombreMedicamento == null) {
-
+        if (fecha == null || nombreMedicamento == null) {
             return;
         }
 
-        Medicamento medicamento
-                = new Medicamento(
-                        fecha,
-                        nombreMedicamento);
-
-        expediente.agregarMedicamento(
-                medicamento);
+        Medicamento medicamento = new Medicamento(fecha, nombreMedicamento);
+        expediente.agregarMedicamento(medicamento);
     }
 
     /**
@@ -464,53 +318,33 @@ public class CargadorJSON {
      * @param clave propiedad
      * @return texto encontrado
      */
-    private String obtenerTexto(
-            String objeto,
-            String clave) {
-
-        String etiqueta
-                = "\"" + clave + "\"";
-
-        int posicionClave
-                = objeto.indexOf(etiqueta);
+    private String obtenerTexto(String objeto, String clave) {
+        String etiqueta = "\"" + clave + "\"";
+        int posicionClave = objeto.indexOf(etiqueta);
 
         if (posicionClave < 0) {
-
             return null;
         }
 
-        int dosPuntos
-                = objeto.indexOf(
-                        ':',
-                        posicionClave);
+        int dosPuntos = objeto.indexOf(':', posicionClave);
 
         if (dosPuntos < 0) {
-
             return null;
         }
 
-        int inicio
-                = objeto.indexOf(
-                        '"',
-                        dosPuntos + 1);
+        int inicio = objeto.indexOf('"', dosPuntos + 1);
 
         if (inicio < 0) {
-
             return null;
         }
 
-        int fin = buscarFinTexto(
-                objeto,
-                inicio + 1);
+        int fin = buscarFinTexto(objeto, inicio + 1);
 
         if (fin < 0) {
-
             return null;
         }
 
-        return objeto.substring(
-                inicio + 1,
-                fin).trim();
+        return objeto.substring(inicio + 1, fin).trim();
     }
 
     /**
@@ -520,63 +354,45 @@ public class CargadorJSON {
      * @param clave propiedad
      * @return numero encontrado
      */
-    private int obtenerNumero(
-            String objeto,
-            String clave) {
+    private int obtenerNumero(String objeto, String clave) {
+        String etiqueta = "\"" + clave + "\"";
 
-        String etiqueta
-                = "\"" + clave + "\"";
-
-        int posicionClave
-                = objeto.indexOf(etiqueta);
+        int posicionClave = objeto.indexOf(etiqueta);
 
         if (posicionClave < 0) {
-
             return -1;
         }
 
-        int dosPuntos
-                = objeto.indexOf(
-                        ':',
-                        posicionClave);
+        int dosPuntos = objeto.indexOf(':', posicionClave);
 
         if (dosPuntos < 0) {
-
             return -1;
         }
 
-        int posicion
-                = dosPuntos + 1;
+        int posicion = dosPuntos + 1;
 
         while (posicion < objeto.length()
-                && Character.isWhitespace(
-                        objeto.charAt(posicion))) {
-
+                && Character.isWhitespace(objeto.charAt(posicion))) {
             posicion++;
         }
 
         String numero = "";
 
         while (posicion < objeto.length()
-                && Character.isDigit(
-                        objeto.charAt(posicion))) {
+                && Character.isDigit(objeto.charAt(posicion))) {
 
             numero += objeto.charAt(posicion);
-
             posicion++;
         }
 
         if (numero.isEmpty()) {
-
             return -1;
         }
 
         try {
-
             return Integer.parseInt(numero);
 
         } catch (NumberFormatException e) {
-
             return -1;
         }
     }
@@ -588,65 +404,42 @@ public class CargadorJSON {
      * @param clave propiedad
      * @return contenido del arreglo
      */
-    private String obtenerArreglo(
-            String objeto,
-            String clave) {
+    private String obtenerArreglo(String objeto, String clave) {
+        String etiqueta = "\"" + clave + "\"";
 
-        String etiqueta
-                = "\"" + clave + "\"";
-
-        int posicionClave
-                = objeto.indexOf(etiqueta);
+        int posicionClave = objeto.indexOf(etiqueta);
 
         if (posicionClave < 0) {
-
             return null;
         }
 
-        int inicio
-                = objeto.indexOf(
-                        '[',
-                        posicionClave);
+        int inicio = objeto.indexOf('[', posicionClave);
 
         if (inicio < 0) {
-
             return null;
         }
 
         int nivel = 0;
-
         boolean dentroTexto = false;
-
         char anterior = '\0';
 
-        for (int i = inicio;
-                i < objeto.length();
-                i++) {
+        for (int i = inicio; i < objeto.length(); i++) {
 
-            char caracter
-                    = objeto.charAt(i);
+            char caracter = objeto.charAt(i);
 
-            if (caracter == '"'
-                    && anterior != '\\') {
-
+            if (caracter == '"' && anterior != '\\') {
                 dentroTexto = !dentroTexto;
             }
 
             if (!dentroTexto) {
-
                 if (caracter == '[') {
-
                     nivel++;
 
                 } else if (caracter == ']') {
-
                     nivel--;
 
                     if (nivel == 0) {
-
-                        return objeto.substring(
-                                inicio + 1,
-                                i);
+                        return objeto.substring(inicio + 1, i);
                     }
                 }
             }
@@ -664,17 +457,11 @@ public class CargadorJSON {
      * @param inicio posicion inicial
      * @return posicion final
      */
-    private int buscarFinTexto(
-            String texto,
-            int inicio) {
+    private int buscarFinTexto(String texto, int inicio) {
 
-        for (int i = inicio;
-                i < texto.length();
-                i++) {
+        for (int i = inicio; i < texto.length(); i++) {
 
-            if (texto.charAt(i) == '"'
-                    && texto.charAt(i - 1) != '\\') {
-
+            if (texto.charAt(i) == '"' && texto.charAt(i - 1) != '\\') {
                 return i;
             }
         }
@@ -688,22 +475,16 @@ public class CargadorJSON {
      * @param fechaTexto fecha recibida
      * @return fecha convertida
      */
-    private Date convertirFecha(
-            String fechaTexto) {
+    private Date convertirFecha(String fechaTexto) {
 
-        if (fechaTexto == null
-                || fechaTexto.trim().isEmpty()) {
-
+        if (fechaTexto == null || fechaTexto.trim().isEmpty()) {
             return null;
         }
 
         try {
-
-            return formatoFecha.parse(
-                    fechaTexto.trim());
+            return formatoFecha.parse(fechaTexto.trim());
 
         } catch (ParseException e) {
-
             return null;
         }
     }
